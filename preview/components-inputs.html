@@ -1,0 +1,56 @@
+<!doctype html>
+<!-- @dsCard group="Components" name="Form inputs" subtitle="Field, focus, error, switch, checkbox" viewport="700x260" -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Components · Form inputs</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 24px; background: var(--rs-bg); }
+  .grid { display:grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .field { display:flex; flex-direction: column; gap: 6px; }
+  label { font-size: 12px; font-weight: 500; color: var(--rs-ink-700); }
+  .helper { font-size: 11px; color: var(--rs-fg-muted); font-family: var(--rs-font-mono); }
+  .input { font-family: var(--rs-font-sans); font-size: 14px; padding: 8px 12px; border: 1px solid var(--rs-border); border-radius: var(--rs-radius-md); background: #FFF; color: var(--rs-ink-900); }
+  .input.focus { border-color: var(--rs-teal-600); box-shadow: 0 0 0 3px var(--rs-focus-ring); outline: none; }
+  .input.error { border-color: var(--rs-grade-3); }
+  .helper.error { color: var(--rs-grade-3); }
+  .toggle { display:flex; align-items: center; gap: 10px; }
+  .switch { width: 32px; height: 18px; background: var(--rs-ink-200); border-radius: var(--rs-radius-pill); position: relative; transition: background var(--rs-dur-fast) var(--rs-ease-out); }
+  .switch.on { background: var(--rs-teal-600); }
+  .switch::after { content:''; width: 14px; height:14px; background: #FFF; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: left var(--rs-dur-fast) var(--rs-ease-out); box-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+  .switch.on::after { left: 16px; }
+  .check-row { display:flex; align-items:center; gap: 8px; }
+  .checkbox { width:16px; height:16px; border:1px solid var(--rs-border); border-radius: 3px; background: #FFF; display:flex; align-items:center; justify-content:center; }
+  .checkbox.on { background: var(--rs-teal-600); border-color: var(--rs-teal-600); }
+  .checkbox.on svg { width: 10px; height: 10px; color: #FFF; }
+</style>
+</head>
+<body class="rs-root">
+  <div class="grid">
+    <div class="field">
+      <label>Patient ID</label>
+      <input class="input" value="RS-02384" />
+      <span class="helper">8 char · alphanumeric</span>
+    </div>
+    <div class="field">
+      <label>Acquisition device</label>
+      <input class="input focus" value="Topcon NW400" />
+      <span class="helper">Focus state</span>
+    </div>
+    <div class="field">
+      <label>Operator notes</label>
+      <input class="input error" value="—" />
+      <span class="helper error">Required field. Add a note before signing.</span>
+    </div>
+    <div class="field" style="gap:14px">
+      <div class="toggle"><div class="switch on"></div><span style="font-size:13px">Show AI heatmap overlay</span></div>
+      <div class="toggle"><div class="switch"></div><span style="font-size:13px;color:var(--rs-fg-muted)">Auto-export DICOM SR</span></div>
+      <div class="check-row">
+        <div class="checkbox on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></div>
+        <span style="font-size:13px">I attest that I reviewed this image</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

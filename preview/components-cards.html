@@ -1,0 +1,53 @@
+<!doctype html>
+<!-- @dsCard group="Components" name="Case cards" subtitle="Default + selected" viewport="700x200" -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Components · Case card</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 24px; background: var(--rs-bg); }
+  .grid { display:grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card { background: var(--rs-bg-raised); border: 1px solid var(--rs-border); border-radius: var(--rs-radius-lg); padding: 14px; display:flex; gap: 14px; }
+  .thumb { width: 84px; height: 84px; border-radius: var(--rs-radius-md); overflow:hidden; flex-shrink: 0; background: #000; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .body { flex: 1; display:flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .top { display:flex; justify-content: space-between; align-items: center; }
+  .id { font-family: var(--rs-font-mono); font-size: 12px; letter-spacing: 0.04em; color: var(--rs-ink-900); }
+  .pat { font-size: 14px; font-weight: 500; }
+  .meta { font-family: var(--rs-font-mono); font-size: 11px; color: var(--rs-fg-muted); }
+  .pill { display:inline-flex; align-items:center; gap: 4px; padding: 3px 8px; border-radius: var(--rs-radius-pill); font-size: 11px; font-weight: 500; line-height: 1; }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .ai { display:inline-flex; align-items:center; gap: 4px; font-family: var(--rs-font-mono); font-size: 10px; letter-spacing: 0.08em; color: var(--rs-overlay-violet); text-transform: uppercase; }
+  .card.selected { border-color: var(--rs-teal-600); box-shadow: 0 0 0 3px var(--rs-focus-ring); }
+</style>
+</head>
+<body class="rs-root">
+  <div class="grid">
+    <div class="card">
+      <div class="thumb"><img src="../assets/fundus-sample-1.svg" alt=""/></div>
+      <div class="body">
+        <div class="top">
+          <span class="id">RS-02384 · OD</span>
+          <span class="pill" style="background:var(--rs-grade-2-bg); color:var(--rs-grade-2)"><span class="dot"></span>Moderate</span>
+        </div>
+        <div class="pat">A. Benali, 58F</div>
+        <div class="meta">Acquired 2026-05-04 · Topcon NW400</div>
+        <div class="ai">● AI · 92.4%</div>
+      </div>
+    </div>
+    <div class="card selected">
+      <div class="thumb"><img src="../assets/fundus-sample-1.svg" alt=""/></div>
+      <div class="body">
+        <div class="top">
+          <span class="id">RS-02385 · OS</span>
+          <span class="pill" style="background:var(--rs-grade-3-bg); color:var(--rs-grade-3)"><span class="dot"></span>Severe</span>
+        </div>
+        <div class="pat">M. Idrissi, 64M</div>
+        <div class="meta">Acquired 2026-05-04 · Pending review</div>
+        <div class="ai">● AI · 88.1% — flagged</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Octopus — Backend, boutons & flux</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; background: var(--rs-bg); color: var(--rs-fg); font-family: var(--rs-font-sans); }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 48px 28px 96px; }
+  .eyebrow { font-family: var(--rs-font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--rs-fg-muted); }
+  h1 { font-size: 34px; letter-spacing: -0.02em; margin: 6px 0 4px; }
+  h2 { font-size: 22px; letter-spacing: -0.015em; margin: 44px 0 6px; padding-top: 20px; border-top: 1px solid var(--rs-hairline); }
+  h3 { font-size: 16px; margin: 24px 0 8px; }
+  p { line-height: 1.6; color: var(--rs-ink-700); margin: 8px 0; }
+  .lead { font-size: 16px; color: var(--rs-ink-700); max-width: 70ch; }
+  .note { background: var(--rs-grade-1-bg); border: 1px solid #F0DCA0; border-radius: var(--rs-radius-md); padding: 14px 16px; font-size: 13.5px; line-height: 1.55; color: #6B5114; margin: 16px 0; }
+  .note b { color: #4A380C; }
+  code, .mono { font-family: var(--rs-font-mono); font-feature-settings: "tnum","zero"; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 14px 0; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rs-hairline); vertical-align: top; }
+  th { font-family: var(--rs-font-mono); font-size: 10.5px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rs-fg-muted); background: var(--rs-bg-sunken); }
+  td code { font-size: 12px; color: var(--rs-teal-800); background: var(--rs-teal-50); padding: 1px 6px; border-radius: 4px; }
+  .btn-tag { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: var(--rs-radius-pill); white-space: nowrap; }
+  .bt-primary { background: var(--rs-teal-600); color: #fff; }
+  .bt-secondary { background: var(--rs-bg-sunken); color: var(--rs-ink-900); border: 1px solid var(--rs-border); }
+  .bt-ghost { background: transparent; color: var(--rs-teal-700); border: 1px solid var(--rs-teal-200); }
+  /* flow diagram */
+  .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 18px 0; padding: 18px; background: var(--rs-bg-raised); border: 1px solid var(--rs-border); border-radius: var(--rs-radius-lg); }
+  .node { display: inline-flex; flex-direction: column; gap: 2px; padding: 10px 14px; background: var(--rs-bg); border: 1px solid var(--rs-border); border-radius: var(--rs-radius-md); min-width: 96px; }
+  .node .n-t { font-size: 13px; font-weight: 600; }
+  .node .n-s { font-family: var(--rs-font-mono); font-size: 10.5px; color: var(--rs-fg-muted); }
+  .node.accent { border-color: var(--rs-teal-400); background: var(--rs-teal-50); }
+  .node.warn { border-color: #E2B43A; background: var(--rs-grade-1-bg); }
+  .arrow { color: var(--rs-fg-subtle); font-size: 18px; }
+  .arrow small { display: block; font-family: var(--rs-font-mono); font-size: 9px; color: var(--rs-fg-subtle); text-align: center; }
+  .schema { background: var(--rs-canvas-900); color: #cfe; border-radius: var(--rs-radius-lg); padding: 18px 20px; font-family: var(--rs-font-mono); font-size: 12.5px; line-height: 1.7; overflow-x: auto; white-space: pre; }
+  .schema .k { color: #7BD6D6; }
+  .schema .c { color: #6E8390; }
+  .pillrow { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; }
+  .lnk { display:inline-flex; gap:8px; flex-wrap:wrap; margin-top: 10px; }
+  .lnk a { font-size: 13px; text-decoration: none; color: var(--rs-teal-700); border: 1px solid var(--rs-teal-200); border-radius: var(--rs-radius-md); padding: 6px 12px; background: var(--rs-teal-50); }
+  .lnk a:hover { background: var(--rs-teal-100); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Octopus AI · Documentation technique</div>
+  <h1>Boutons, liaisons & exploitation backend</h1>
+  <p class="lead">Cette page décrit chaque bouton de l'application, la manière dont les écrans s'enchaînent, et comment la <b>petite base de test</b> (locale, dans le navigateur) se branche au vrai backend FastAPI / PostgreSQL.</p>
+
+  <div class="note">
+    <b>Périmètre du prototype.</b> Le prototype tourne entièrement dans le navigateur. Pour le tester, il embarque une <b>petite base de données locale</b> (<code>lib/db.js</code>, persistée dans <code>localStorage</code>) qui rejoue le pipeline IA et stocke cas + rapports. L'API de cette base est <b>identique</b> aux futurs endpoints du serveur : passer en production = remplacer le corps de chaque méthode par un <code>fetch()</code>. Aucun appareil médical réel n'est connecté.
+  </div>
+
+  <h2>1. Les trois profils et leur point d'entrée</h2>
+  <table>
+    <thead><tr><th>Profil</th><th>Écran</th><th>Rôle principal</th></tr></thead>
+    <tbody>
+      <tr><td><b>Docteur</b></td><td><code>ui_kits/doctor/index.html</code></td><td>Téléverser une image, lire le grade IA, signer le rapport</td></tr>
+      <tr><td><b>Étudiant</b></td><td><code>ui_kits/student/index.html</code></td><td>Simulateur de cas, progression</td></tr>
+      <tr><td><b>Admin</b></td><td><code>ui_kits/admin/index.html</code></td><td>Utilisateurs, jeux de données, modèles</td></tr>
+      <tr><td><b>Réglages</b></td><td><code>ui_kits/settings/index.html?profile=…</code></td><td>Compte, modèles, 3D, thèmes, monitoring</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Flux principal — Docteur : téléverser → analyser → signer</h2>
+  <div class="flow">
+    <div class="node accent"><span class="n-t">Téléverser</span><span class="n-s">DR · upload</span></div>
+    <span class="arrow">→<small>addCase()</small></span>
+    <div class="node warn"><span class="n-t">Analyse IA</span><span class="n-s">infer()</span></div>
+    <span class="arrow">→<small>~0,9 s</small></span>
+    <div class="node"><span class="n-t">File de lecture</span><span class="n-s">listCases()</span></div>
+    <span class="arrow">→<small>onPick</small></span>
+    <div class="node"><span class="n-t">Étude active</span><span class="n-s">getCase()</span></div>
+    <span class="arrow">→<small>saveReport()</small></span>
+    <div class="node accent"><span class="n-t">Rapport signé</span><span class="n-s">status: signed</span></div>
+  </div>
+
+  <h3>Boutons de l'écran « Téléverser »</h3>
+  <table>
+    <thead><tr><th>Bouton</th><th>Action</th><th>Liaison</th></tr></thead>
+    <tbody>
+      <tr><td>Zone glisser-déposer</td><td>Charge l'aperçu du fichier (JPEG/PNG/DICOM)</td><td>local — état React</td></tr>
+      <tr><td><span class="btn-tag bt-secondary">OD / OS</span></td><td>Choisit la latéralité de l'œil</td><td>champ du formulaire</td></tr>
+      <tr><td><span class="btn-tag bt-primary">Lancer l'analyse IA</span></td><td>Crée le cas, exécute l'inférence, puis ouvre l'étude</td><td><code>OctopusDB.addCase()</code> → <code>POST /api/cases</code></td></tr>
+      <tr><td><span class="btn-tag bt-ghost">Ouvrir →</span></td><td>Ouvre un téléversement récent</td><td><code>getCase(id)</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Boutons de l'écran « Étude active »</h3>
+  <table>
+    <thead><tr><th>Bouton</th><th>Action</th><th>Liaison</th></tr></thead>
+    <tbody>
+      <tr><td>+ / − &amp; zoom</td><td>Zoome l'image du fond d'œil</td><td>local — CSS transform</td></tr>
+      <tr><td>Grad-CAM · Vaisseaux · Disque · Boîtes</td><td>Active/désactive les calques IA sur l'image</td><td>local — état overlays</td></tr>
+      <tr><td>Critères de lésions <em>(cliquables)</em></td><td>Localise chaque type de lésion par des repères pulsés sur l'image</td><td><code>case.lesionBreakdown</code></td></tr>
+      <tr><td><span class="btn-tag bt-secondary">Vue 3D</span></td><td>Ouvre la structure vasculaire 3D (rotation + zoom)</td><td>local — canvas</td></tr>
+      <tr><td><span class="btn-tag bt-secondary">2ᵉ avis</span></td><td>Envoie une demande à un spécialiste (toast)</td><td><code>POST /api/cases/:id/second-opinion</code></td></tr>
+      <tr><td><span class="btn-tag bt-secondary">PDF</span></td><td>Génère le rapport imprimable</td><td>local → <code>GET /api/cases/:id/report.pdf</code></td></tr>
+      <tr><td><span class="btn-tag bt-primary">Signer &amp; exporter</span></td><td>Enregistre le rapport, passe le cas en « signé »</td><td><code>OctopusDB.saveReport()</code> → <code>POST /api/cases/:id/report</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. La petite base de test (lib/db.js)</h2>
+  <p>Une base de données minimale, persistée dans le navigateur, pour faire tourner l'application de bout en bout. Réinitialisable à tout moment via la console : <code>OctopusDB.reset()</code>.</p>
+  <div class="schema"><span class="c"># Entités stockées dans localStorage["octopus.db.v1"]</span>
+<span class="k">Case</span>        { id, patient, age, sex, laterality, acquired, device,
+              grade, conf, av, lesions, lesionBreakdown{ma,ex,hem,cw},
+              status: pending|flagged|urgent|cleared|signed, note }
+<span class="k">Report</span>      { id, caseId, text, author, signedAt }
+<span class="k">User</span>        { id, name, email, role, dept, status, cases }
+<span class="k">Dataset</span>     { id, name, type, n, status }
+<span class="k">Model</span>       { id, name, task, metric, status }
+<span class="k">AuditEntry</span>  { ts, action, meta }   <span class="c"># trace immuable</span></div>
+
+  <h2>4. Correspondance base locale → backend réel</h2>
+  <p>Chaque méthode de <code>OctopusDB</code> a une signature alignée sur un endpoint FastAPI. Le passage en production ne change que l'implémentation interne.</p>
+  <table>
+    <thead><tr><th>Méthode (prototype)</th><th>Endpoint (production)</th><th>Table PostgreSQL</th></tr></thead>
+    <tbody>
+      <tr><td><code>listCases()</code></td><td><code>GET /api/cases</code></td><td>cases</td></tr>
+      <tr><td><code>getCase(id)</code></td><td><code>GET /api/cases/:id</code></td><td>cases</td></tr>
+      <tr><td><code>addCase(payload)</code></td><td><code>POST /api/cases</code></td><td>cases + objet image (MinIO)</td></tr>
+      <tr><td><code>runInference(id)</code></td><td><code>POST /api/cases/:id/infer</code></td><td>ai_results (service GPU)</td></tr>
+      <tr><td><code>saveReport(id, txt)</code></td><td><code>POST /api/cases/:id/report</code></td><td>reports</td></tr>
+      <tr><td><code>listReports()</code></td><td><code>GET /api/reports</code></td><td>reports</td></tr>
+      <tr><td><code>listUsers()</code></td><td><code>GET /api/users</code></td><td>users (RBAC Keycloak)</td></tr>
+      <tr><td><code>listDatasets()</code></td><td><code>GET /api/datasets</code></td><td>datasets</td></tr>
+      <tr><td><code>listModels()</code></td><td><code>GET /api/models</code></td><td>model_registry (MLflow)</td></tr>
+      <tr><td><code>listAudit()</code></td><td><code>GET /api/audit</code></td><td>audit_log</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Exemple de bascule (une seule méthode)</h3>
+  <div class="schema"><span class="c">// Prototype (local)</span>
+listCases() { return clone(DB.cases); }
+
+<span class="c">// Production — même signature, corps remplacé</span>
+async listCases() {
+  const r = await fetch('/api/cases', { headers: authHeader() });
+  return r.json();
+}</div>
+
+  <div class="note" style="background:var(--rs-teal-50);border-color:var(--rs-teal-200);color:var(--rs-teal-800)">
+    <b>Le backend réel est livré.</b> Code FastAPI + SQLAlchemy dans <code>backend/</code> (voir <code>backend/README.md</code>).
+    Démarrer petit : <code>cd backend &amp;&amp; pip install -r requirements.txt &amp;&amp; uvicorn app.main:app --reload</code> (SQLite auto-amorcé, docs sur <code>/docs</code>).
+    Brancher l'interface dessus, dans la console du navigateur :
+    <code>localStorage.setItem('octopus.api_url','http://localhost:8000/api'); location.reload()</code>.
+    L'app hydrate alors ses données du serveur et écrit (téléversement, signature, tentative) vers l'API ; sans cette clé, elle reste en mode local.
+  </div>
+
+  <h2>5. Pile backend cible (rappel PRD)</h2>
+  <div class="pillrow">
+    <span class="btn-tag bt-secondary">FastAPI · Python 3.12</span>
+    <span class="btn-tag bt-secondary">PostgreSQL 16</span>
+    <span class="btn-tag bt-secondary">MongoDB 7 (métadonnées image)</span>
+    <span class="btn-tag bt-secondary">MinIO (objets / images)</span>
+    <span class="btn-tag bt-secondary">Redis 7 (cache)</span>
+    <span class="btn-tag bt-secondary">PyTorch 2 + ONNX (inférence GPU)</span>
+    <span class="btn-tag bt-secondary">Keycloak (OIDC / RBAC)</span>
+    <span class="btn-tag bt-secondary">Sentry (monitoring)</span>
+  </div>
+  <p>Pour démarrer petit : un seul service FastAPI + une base PostgreSQL avec les 6 tables ci-dessus suffisent à reproduire l'API de <code>OctopusDB</code>. L'inférence peut d'abord renvoyer une réponse simulée (comme <code>infer()</code>) avant de brancher le vrai modèle.</p>
+
+  <div class="lnk">
+    <a href="../ui_kits/doctor/index.html?view=upload">→ Tester : Téléverser une image</a>
+    <a href="../ui_kits/doctor/index.html">→ Ouvrir l'interface docteur</a>
+  </div>
+</div>
+</body>
+</html>

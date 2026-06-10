@@ -1,0 +1,484 @@
+
+RETINASIGHT AI
+Intelligent Retinal Disease Diagnosis Platform
+
+PRODUCT REQUIREMENTS DOCUMENT
+Version 1.0  |  May 2026  |  Confidential
+Document Owner
+Product & Clinical Team
+Status
+Draft – Internal Review
+Target Release
+Q1 2027
+Classification
+Confidential
+
+1. Executive Summary
+RetinaSight AI is a multi-role, cloud-native clinical intelligence platform designed to support the detection, diagnosis, and staged grading of diabetic retinopathy (DR) and a broad spectrum of other retinal pathologies, including age-related macular degeneration (AMD), glaucomatous optic neuropathy, retinal vein occlusion (RVO), and macular oedema.
+The platform addresses three distinct user journeys: (1) a Clinical Diagnosis module for ophthalmologists and general practitioners who require AI-assisted fundus image analysis and structured blood vessel morphology reporting; (2) a Simulation & Learning module for medical students and interns to build diagnostic competency through curated, expert-labelled case libraries, guided simulations, and knowledge evaluations; and (3) an Administration module for platform managers to curate datasets, configure evaluations, manage AI model lifecycles, and govern user access.
+The system is intended to reduce diagnostic latency in underserved settings, standardise grading quality, and serve as a credentialled training environment aligned with international ophthalmology curricula.
+
+2. Background & Problem Statement
+2.1 Clinical Context
+Diabetic retinopathy is the leading cause of preventable blindness worldwide, affecting an estimated 103 million adults (IDF 2025). Early-stage DR and other vision-threatening retinal diseases are frequently asymptomatic, making opportunistic fundus screening critical. Key barriers include:
+Shortage of trained ophthalmologists, particularly in low- and middle-income countries
+Inconsistent grading quality and inter-reader variability between clinicians
+Delayed diagnoses due to manual image review backlogs in high-volume screening programmes
+Insufficient clinical training infrastructure for the next generation of ophthalmologists
+
+2.2 Opportunity
+Deep learning models trained on large fundus datasets now achieve expert-level sensitivity and specificity for DR grading. RetinaSight AI operationalises these models within a purpose-built clinical workflow, augmenting—not replacing—physician decision-making, while simultaneously serving as a scalable educational environment.
+
+3. Scope & Objectives
+3.1 In Scope
+AI-assisted DR grading (5-level ETDRS/ICDR scale) and lesion detection
+Retinal blood vessel segmentation, calibre measurement, and morphology reporting
+Detection of co-occurring pathologies: AMD, glaucoma, RVO, macular oedema
+Curated annotated case dataset library for learning and simulation
+Formative and summative knowledge evaluation engine
+Administrative tooling: dataset curation, model management, user governance
+DICOM and HL7 FHIR R4 interoperability
+
+3.2 Out of Scope (v1.0)
+Ultra-widefield or OCT image analysis (planned v2.0)
+Direct prescribing or treatment recommendation engine
+Real-time video fundoscopy streaming
+Native mobile applications (iOS / Android)
+
+4. Stakeholders & User Personas
+4.1 Persona 1 — Dr. Amina (Ophthalmologist / General Practitioner)
+Dr. Amina manages a busy diabetes clinic and screens 40–60 patients per week. She needs rapid, reliable AI-assisted grading with explainable outputs she can trust before countersigning a report. She is proficient with digital imaging tools but has limited tolerance for complex UX.
+4.2 Persona 2 — Karim (4th-Year Medical Student / Intern)
+Karim is preparing for his ophthalmology rotation. He has theoretical knowledge of DR but limited hands-on exposure to real fundus images. He needs a safe, low-stakes environment to practise grading and receive instant expert feedback. He primarily uses a laptop and occasionally a tablet.
+4.3 Persona 3 — Fatima (Platform Administrator / Dataset Curator)
+Fatima is a biomedical informaticist responsible for maintaining the quality and integrity of the image dataset, deploying updated AI models, configuring evaluation question banks, and ensuring regulatory compliance. She requires powerful administrative tools with audit transparency.
+
+5. Functional Requirements
+5.1 Module 1 — Clinical Diagnosis (Doctor Perspective)
+IMAGE ANALYSIS & AI DIAGNOSTICS
+The clinical module provides ophthalmologists and general practitioners with an end-to-end workflow: from secure image ingestion through AI-powered lesion detection, DR grading, vessel analysis, and structured report export.
+Accept fundus images in JPEG, PNG, and DICOM 3.0 formats via drag-and-drop or PACS push
+Run AI inference within 5 seconds to produce a 5-level DR grade with confidence score
+Generate colour-coded heatmap overlays pinpointing microaneurysms, hard exudates, soft exudates, intraretinal haemorrhages, neovascularisation, and disc abnormalities
+Perform automated vessel segmentation with artery/vein classification and calibre estimation (A:V ratio, fractal dimension, tortuosity index)
+Screen for AMD (drusen, geographic atrophy, CNV), glaucomatous cupping (CDR), and RVO
+Present a structured finding summary with severity classification aligned to ETDRS/ICDR grading standards
+PATIENT & REPORT MANAGEMENT
+Maintain a longitudinal patient record with image history, grading trends, and clinical notes
+Side-by-side comparison viewer for follow-up assessment
+Generate printable and exportable PDF reports with images, findings, and recommendations
+HL7 FHIR R4 API for bidirectional EHR/EMR integration
+Second-opinion workflow: annotate image and securely share with a remote colleague
+
+5.2 Module 2 — Simulation & Learning (Student / Intern Perspective)
+CASE LIBRARY & GUIDED LEARNING
+The learning module exposes trainees to a rich, expert-annotated fundus image library, structured as case-based learning journeys. Cases are tagged by pathology, severity, image quality, and difficulty level.
+Browse and filter case library by pathology type, ETDRS grade, patient demographics (anonymised), and difficulty
+View clinical vignette, patient history, and examination findings before revealing the fundus image
+Interactive annotation canvas: trainee draws suspected lesion locations before seeing expert overlay
+Simulation mode: trainee submits a grade, then reveals step-by-step expert reasoning and annotated reference image
+Annotated atlas with canonical reference images per pathology and per severity grade
+KNOWLEDGE EVALUATION
+Configurable assessment sessions: MCQ, image-based diagnosis, grading classification, and vessel analysis questions
+Automated scoring with immediate feedback and explanation after each response
+Summative examinations with timed sessions, score reporting, and pass/fail thresholds
+Progress dashboard: completion rate, average score by category, improvement trend over time
+Certificate of completion generation upon achieving configured competency thresholds
+
+5.3 Module 3 — Administration
+DATASET MANAGEMENT
+The administration module provides full lifecycle management of the clinical image dataset underpinning both the AI model and the learning library.
+Batch image ingestion pipeline with automatic metadata extraction (modality, acquisition date, device)
+Multi-rater expert annotation tool with consensus adjudication workflow (majority vote or senior review)
+Dataset versioning and changelog for reproducibility and model traceability
+Quality control checks: resolution, illumination uniformity, focus scoring; flagging and quarantine of low-quality images
+GDPR-compliant de-identification pipeline (face/identifier scrubbing)
+EVALUATION & CONFIGURATION
+Question bank editor: create, tag, and version MCQ and image-based questions
+Assessment builder: configure question selection rules, timing, pass mark, and certificate template
+AI model registry: upload new model checkpoints, compare benchmark metrics, promote to production, roll back
+USER & PLATFORM GOVERNANCE
+Role-Based Access Control (RBAC): Doctor, Student, Intern, Annotator, Reviewer, Admin, Super-Admin
+Audit trail with immutable log of all data access, model inferences, annotations, and configuration changes
+Platform KPI dashboard: active users, images processed, evaluation completion rates, AI model performance over time
+
+6. Non-Functional Requirements
+6.1 Performance
+AI inference latency ≤ 5 seconds (95th percentile) under standard clinical server load
+Web UI interaction response time ≤ 2 seconds (95th percentile) for all user interactions
+Dataset ingestion pipeline capable of processing 10,000 images per batch without service degradation
+6.2 Security & Compliance
+TLS 1.3 for all data in transit; AES-256 encryption for all data at rest
+Full GDPR (EU 2016/679) and HIPAA (45 CFR Part 164) compliance
+Design and documentation aligned with FDA 510(k) SaMD pathway and EU MDR Annex I for the AI diagnostic module
+OWASP Top 10 mitigations; annual penetration testing; SAST/DAST in CI pipeline
+6.3 Availability & Scalability
+System SLA: 99.5% monthly uptime (excluding planned maintenance windows)
+Horizontal auto-scaling to support up to 10,000 concurrent users
+RPO ≤ 1 hour; RTO ≤ 4 hours via automated backups and multi-AZ deployment
+6.4 AI Model Quality
+DR grading model: AUROC ≥ 0.95, sensitivity ≥ 0.90, specificity ≥ 0.90 on held-out validation set
+Vessel segmentation: Dice coefficient ≥ 0.85 on DRIVE benchmark dataset
+All AI outputs must include a calibrated confidence score and explainability heatmap (Grad-CAM or equivalent)
+
+7. Proposed Technical Architecture & Stack
+7.1 Architecture Overview
+RetinaSight AI follows a microservices architecture deployed on Kubernetes, with dedicated service clusters for inference workloads (GPU-accelerated) and general application workloads (CPU). A unified API Gateway exposes controlled surfaces to each frontend application. Event-driven messaging (Kafka) decouples the ingestion pipeline from the inference and notification services.
+
+7.2 Technology Stack
+
+Layer
+Primary
+Secondary
+Tooling
+Notes / Alt.
+Frontend
+React 18 + TypeScript
+Next.js 14 (SSR/SSG)
+Tailwind CSS + Radix UI
+Vite / Turbopack
+Backend API
+Python 3.12 + FastAPI
+RESTful & GraphQL
+Pydantic v2
+Uvicorn / Gunicorn
+AI / ML
+PyTorch 2 + Timm
+ONNX Runtime
+Hugging Face Hub
+MLflow (experiment tracking)
+Image Processing
+Pydicom (DICOM)
+OpenCV 4
+Pillow / scikit-image
+ITK (vessel analysis)
+Database
+PostgreSQL 16 (structured)
+MongoDB 7 (images/metadata)
+Redis 7 (cache)
+MinIO (object storage)
+Auth & Security
+Keycloak (OIDC/OAuth2)
+JWT + refresh tokens
+Vault (secrets mgmt.)
+RBAC middleware
+Infrastructure
+Kubernetes (EKS/GKE)
+Terraform (IaC)
+Docker / Helm
+NVIDIA GPU nodes
+CI/CD
+GitHub Actions
+ArgoCD (GitOps)
+SonarQube (SAST)
+Trivy (container scan)
+Observability
+Prometheus + Grafana
+OpenTelemetry
+ELK Stack (logs)
+PagerDuty (alerting)
+Interoperability
+HL7 FHIR R4 (Hapi FHIR)
+DICOM 3.0
+SMART on FHIR
+API Gateway (Kong)
+
+7.3 AI / ML Pipeline Detail
+The AI pipeline is implemented as an asynchronous microservice. Incoming images are validated, pre-processed (CLAHE normalisation, resize to 512×512), and passed to the inference service running on GPU nodes. The primary model is a ResNet-50 / EfficientNet-B4 ensemble fine-tuned on the EyePACS, MESSIDOR-2, and APTOS-2019 datasets. Vessel segmentation uses a U-Net variant trained on DRIVE and CHASEDB1. ONNX Runtime with TensorRT optimization provides sub-5-second inference on NVIDIA T4 GPUs.
+Models are tracked and versioned via MLflow; champion/challenger deployment via Argo Rollouts canary strategy
+Explainability: Grad-CAM++ heatmaps generated post-inference and stored alongside the image result
+Model drift monitoring via Evidently AI; automatic alert when accuracy degrades beyond configurable threshold
+
+8. Requirements Summary Table
+The following table consolidates all functional and non-functional requirements with unique identifiers, module scope, and priority classification.
+
+Req. ID
+Type
+Module
+Priority
+Requirement Description
+REQ-F-001
+Functional
+Doctor
+High
+Fundus image upload (JPEG, PNG, DICOM)
+REQ-F-002
+Functional
+Doctor
+High
+AI-powered DR grading (No DR / Mild / Moderate / Severe / Proliferative)
+REQ-F-003
+Functional
+Doctor
+High
+Detection of other retinal pathologies (AMD, glaucoma, RVO, etc.)
+REQ-F-004
+Functional
+Doctor
+High
+Blood vessel segmentation and morphology analysis
+REQ-F-005
+Functional
+Doctor
+High
+Lesion heatmap overlay (microaneurysms, exudates, haemorrhages)
+REQ-F-006
+Functional
+Doctor
+High
+Structured diagnostic report generation (PDF / print)
+REQ-F-007
+Functional
+Doctor
+Medium
+Patient record management and history timeline
+REQ-F-008
+Functional
+Doctor
+Medium
+Comparison viewer for longitudinal follow-up
+REQ-F-009
+Functional
+Doctor
+Medium
+Second-opinion request and annotation sharing
+REQ-F-010
+Functional
+Doctor
+Low
+Integration with EHR/EMR via HL7 FHIR R4
+REQ-F-011
+Functional
+Student
+High
+Access to curated, labelled fundus image dataset
+REQ-F-012
+Functional
+Student
+High
+Case-based learning with progressive difficulty levels
+REQ-F-013
+Functional
+Student
+High
+Interactive quiz and self-assessment per case
+REQ-F-014
+Functional
+Student
+High
+Knowledge evaluation module with scoring and feedback
+REQ-F-015
+Functional
+Student
+Medium
+Simulation mode: diagnose image then reveal expert annotation
+REQ-F-016
+Functional
+Student
+Medium
+Progress tracking dashboard and learning analytics
+REQ-F-017
+Functional
+Student
+Medium
+Annotated atlas with reference images per pathology
+REQ-F-018
+Functional
+Student
+Low
+Collaborative study rooms and peer discussion forums
+REQ-F-019
+Functional
+Admin
+High
+Dataset ingestion pipeline with metadata tagging
+REQ-F-020
+Functional
+Admin
+High
+Expert annotation tool with multi-rater consensus
+REQ-F-021
+Functional
+Admin
+High
+Quality assurance workflow and dataset versioning
+REQ-F-022
+Functional
+Admin
+High
+User and role management (RBAC)
+REQ-F-023
+Functional
+Admin
+Medium
+Evaluation configuration: question banks, scoring rules
+REQ-F-024
+Functional
+Admin
+Medium
+AI model management: deploy, rollback, performance monitor
+REQ-F-025
+Functional
+Admin
+Medium
+Audit log for all user actions and data modifications
+REQ-F-026
+Functional
+Admin
+Low
+Platform usage analytics and reporting dashboard
+REQ-NF-001
+Performance
+All
+High
+AI inference < 5 seconds per image on standard server
+REQ-NF-002
+Performance
+All
+High
+UI response time < 2 seconds for 95th percentile
+REQ-NF-003
+Security
+All
+High
+End-to-end TLS 1.3 encryption for all data in transit
+REQ-NF-004
+Security
+All
+High
+AES-256 encryption for all data at rest
+REQ-NF-005
+Compliance
+All
+High
+GDPR and HIPAA compliance for patient data handling
+REQ-NF-006
+Compliance
+Doctor
+High
+CE Mark / FDA 510(k) pathway readiness for AI module
+REQ-NF-007
+Availability
+All
+High
+System uptime SLA ≥ 99.5% (excluding maintenance windows)
+REQ-NF-008
+Scalability
+All
+Medium
+Horizontal scaling to support 10,000 concurrent users
+REQ-NF-009
+Usability
+Doctor
+High
+Accessible on desktop browser with no plugin installation
+REQ-NF-010
+Usability
+Student
+Medium
+Responsive design for tablet and mobile devices
+REQ-NF-011
+AI Quality
+Doctor
+High
+DR grading AUC ≥ 0.95 on validation benchmark dataset
+REQ-NF-012
+AI Quality
+Doctor
+High
+Vessel segmentation Dice score ≥ 0.85 on DRIVE dataset
+REQ-NF-013
+Interop.
+Doctor
+Medium
+DICOM 3.0 import/export support
+REQ-NF-014
+Backup
+All
+High
+Automated daily backups with RPO ≤ 1 hour, RTO ≤ 4 hours
+
+9. Key Data Entities
+The core data model comprises the following primary entities and their relationships:
+Patient: anonymised demographic data, linked to one or more FundusStudy records
+FundusStudy: acquisition metadata (date, device, laterality) + one or more FundusImage records
+FundusImage: raw image file reference (MinIO), DICOM metadata, quality score
+AIResult: DR grade, confidence, pathology flags, heatmap reference, model version, inference timestamp
+VesselAnalysis: segmentation mask reference, A:V ratio, tortuosity index, fractal dimension
+ClinicalReport: doctor-authored narrative, findings summary, AI result reference, export history
+Case (Learning): linked FundusImage, expert annotation set, clinical vignette, difficulty tag, pathology tags
+Assessment: configuration (question count, time limit, pass mark), linked to User attempt records
+UserAttempt: question responses, score, timestamp, feedback snapshots
+AnnotationSet: polygon/point coordinates, label, annotator, consensus status, reviewer sign-off
+
+10. Delivery Roadmap
+Phase 0 — Foundation (Months 1–2)
+Infrastructure provisioning (Kubernetes clusters, storage, CI/CD pipelines)
+Core authentication service (Keycloak), RBAC schema, audit log framework
+DICOM ingestion pipeline and MinIO object storage integration
+Phase 1 — Clinical MVP (Months 3–5)
+AI inference service: DR grading model + Grad-CAM heatmap overlay
+Clinical UI: image upload, AI result display, basic report export
+Patient record and study management
+Phase 2 — Learning Module (Months 5–7)
+Case library browser, simulation mode, annotation canvas
+Knowledge evaluation engine: MCQ + image-based questions, scoring, feedback
+Student progress dashboard
+Phase 3 — Full Feature Completion (Months 7–9)
+Vessel segmentation service and morphology reporting
+Administration console: dataset curation, annotation tool, model registry
+FHIR R4 API and EHR integration connector
+Advanced pathology detection (AMD, glaucoma, RVO)
+Phase 4 — Hardening & Launch (Months 10–12)
+Penetration testing, security audit, and GDPR data protection impact assessment
+Clinical validation study and AI model regulatory documentation
+Pilot deployment with partner clinical site and medical school
+General availability release
+
+11. Glossary
+Term
+Definition
+AMD
+Age-Related Macular Degeneration
+AUC/AUROC
+Area Under the Receiver Operating Characteristic Curve
+CDR
+Cup-to-Disc Ratio (optic nerve assessment)
+CLAHE
+Contrast Limited Adaptive Histogram Equalisation
+CNV
+Choroidal Neovascularisation
+DICOM
+Digital Imaging and Communications in Medicine (image standard)
+DR
+Diabetic Retinopathy
+ETDRS
+Early Treatment Diabetic Retinopathy Study grading scale
+FHIR
+Fast Healthcare Interoperability Resources (HL7 standard)
+Grad-CAM
+Gradient-weighted Class Activation Mapping (AI explainability method)
+ICDR
+International Clinical Diabetic Retinopathy Disease Severity Scale
+PACS
+Picture Archiving and Communication System
+RBAC
+Role-Based Access Control
+RPO/RTO
+Recovery Point Objective / Recovery Time Objective
+RVO
+Retinal Vein Occlusion
+SaMD
+Software as a Medical Device
+
+12. Document Control
+Version
+Date
+Author
+Summary of Changes
+1.0
+May 2026
+Product & Clinical Team
+Initial draft for internal review
+
+This document is subject to change. All updates must be reviewed by the Product Owner and Clinical Lead before publication.

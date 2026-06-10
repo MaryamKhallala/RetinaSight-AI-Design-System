@@ -1,0 +1,50 @@
+<!doctype html>
+<!-- @dsCard group="Components" name="AI confidence & overlays" subtitle="Grade probability + overlay toggles" viewport="700x280" -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Components · AI confidence</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 24px; background: var(--rs-bg); }
+  .grid { display:grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .panel { background: var(--rs-bg-raised); border: 1px solid var(--rs-border); border-radius: var(--rs-radius-lg); padding: 16px; }
+  .head-row { display:flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .title { font-size: 13px; font-weight: 600; }
+  .ai-tag { font-family: var(--rs-font-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--rs-overlay-violet); text-transform: uppercase; }
+  .grades { display:flex; flex-direction: column; gap: 8px; }
+  .grade-row { display:grid; grid-template-columns: 110px 1fr 50px; align-items: center; gap: 10px; font-size: 12px; }
+  .bar { height: 8px; border-radius: var(--rs-radius-pill); background: var(--rs-ink-100); overflow: hidden; }
+  .bar > span { display:block; height:100%; border-radius: inherit; }
+  .num { font-family: var(--rs-font-mono); font-size: 11px; text-align: right; color: var(--rs-ink-700); }
+  .stack { display:flex; flex-direction: column; gap: 8px; }
+  .row { display:flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: var(--rs-radius-md); cursor: pointer; }
+  .row.on { background: var(--rs-teal-50); color: var(--rs-teal-800); }
+  .row .sw { width: 14px; height: 14px; border: 1.5px solid currentColor; border-radius: 3px; display:flex; align-items:center; justify-content:center; }
+  .row.on .sw { background: var(--rs-teal-600); border-color: var(--rs-teal-600); color: #FFF; }
+</style>
+</head>
+<body class="rs-root">
+  <div class="grid">
+    <div class="panel">
+      <div class="head-row"><span class="title">DR grade · model output</span><span class="ai-tag">● AI</span></div>
+      <div class="grades">
+        <div class="grade-row"><span>0 · No DR</span><div class="bar"><span style="width:6%; background:var(--rs-grade-0)"></span></div><span class="num">6%</span></div>
+        <div class="grade-row"><span>1 · Mild</span><div class="bar"><span style="width:14%; background:var(--rs-grade-1)"></span></div><span class="num">14%</span></div>
+        <div class="grade-row"><span>2 · Moderate</span><div class="bar"><span style="width:62%; background:var(--rs-grade-2)"></span></div><span class="num"><b>62%</b></span></div>
+        <div class="grade-row"><span>3 · Severe</span><div class="bar"><span style="width:14%; background:var(--rs-grade-3)"></span></div><span class="num">14%</span></div>
+        <div class="grade-row"><span>4 · Proliferative</span><div class="bar"><span style="width:4%; background:var(--rs-grade-4)"></span></div><span class="num">4%</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="head-row"><span class="title">Overlays</span><span class="ai-tag">VIEWER</span></div>
+      <div class="stack">
+        <div class="row on"><div class="sw"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></div><span style="font-size:13px">Grad-CAM lesion heatmap</span><span style="margin-left:auto; font-family:var(--rs-font-mono); font-size:10px; color:var(--rs-overlay-magenta)">●</span></div>
+        <div class="row on"><div class="sw"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></div><span style="font-size:13px">Vessel segmentation</span><span style="margin-left:auto; font-family:var(--rs-font-mono); font-size:10px; color:var(--rs-overlay-cyan)">●</span></div>
+        <div class="row" style="color:var(--rs-fg-muted)"><div class="sw"></div><span style="font-size:13px">Optic disc &amp; cup contour</span></div>
+        <div class="row" style="color:var(--rs-fg-muted)"><div class="sw"></div><span style="font-size:13px">Lesion bounding boxes</span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

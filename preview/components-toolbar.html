@@ -1,0 +1,43 @@
+<!doctype html>
+<!-- @dsCard group="Components" name="Image viewer toolbar" subtitle="Floating tool palette on dark canvas" viewport="700x280" -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Components · Image viewer toolbar</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 0; background: var(--rs-canvas-900); display:flex; align-items: center; justify-content: center; height: 280px; }
+  .stage { width: calc(100% - 48px); height: calc(100% - 48px); position: relative; border-radius: var(--rs-radius-lg); overflow: hidden; background: #000; display:flex; align-items:center; justify-content:center; }
+  .stage img { width: 200px; height: 200px; opacity: 0.95; }
+  .stage img.overlay { position: absolute; mix-blend-mode: screen; opacity: 0.65; }
+  .toolbar { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); display:flex; gap: 4px; padding: 4px; background: rgba(20,28,36,0.78); backdrop-filter: blur(12px); border-radius: var(--rs-radius-md); border: 1px solid rgba(255,255,255,0.1); }
+  .btn { width: 32px; height: 32px; display:flex; align-items: center; justify-content: center; color: var(--rs-canvas-fg); border-radius: var(--rs-radius-sm); cursor: pointer; }
+  .btn:hover { background: rgba(255,255,255,0.08); }
+  .btn.on { background: rgba(110,200,200,0.15); color: var(--rs-teal-300); }
+  .sep { width: 1px; background: rgba(255,255,255,0.1); margin: 4px 4px; }
+  .meta-pill { position: absolute; top: 12px; left: 12px; font-family: var(--rs-font-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--rs-canvas-fg-mute); background: rgba(0,0,0,0.4); padding: 4px 10px; border-radius: var(--rs-radius-pill); }
+  .grade-pill { position: absolute; top: 12px; right: 12px; font-family: var(--rs-font-sans); font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: var(--rs-radius-pill); background: var(--rs-grade-2); color: #FFF; display:inline-flex; align-items: center; gap: 6px; }
+  .grade-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: #FFF; }
+</style>
+</head>
+<body class="rs-root">
+  <div class="stage">
+    <img src="../assets/fundus-sample-1.svg" alt="">
+    <img class="overlay" src="../assets/fundus-sample-heatmap.svg" alt="">
+    <span class="meta-pill">RS-02384 · OD · 512×512</span>
+    <span class="grade-pill"><span class="dot"></span>Moderate · 92%</span>
+    <div class="toolbar">
+      <div class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/></svg></div>
+      <div class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h18M12 3v18"/></svg></div>
+      <div class="sep"></div>
+      <div class="btn on"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="6" height="6"/><rect x="9" y="3" width="6" height="6" opacity="0.7"/><rect x="15" y="3" width="6" height="6" opacity="0.4"/><rect x="3" y="9" width="6" height="6" opacity="0.4"/><rect x="9" y="9" width="6" height="6"/><rect x="15" y="9" width="6" height="6" opacity="0.6"/><rect x="3" y="15" width="6" height="6" opacity="0.2"/><rect x="9" y="15" width="6" height="6" opacity="0.5"/><rect x="15" y="15" width="6" height="6" opacity="0.3"/></svg></div>
+      <div class="btn on"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 12 Q 8 6, 14 8 T 21 6"/><path d="M14 8 Q 16 11, 18 14"/><path d="M14 8 Q 13 11, 12 15"/></svg></div>
+      <div class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5" opacity="0.6"/></svg></div>
+      <div class="sep"></div>
+      <div class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5v14"/></svg></div>
+      <div class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14"/></svg></div>
+      <div class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8V4h4M20 8V4h-4M4 16v4h4M20 16v4h-4"/></svg></div>
+    </div>
+  </div>
+</body>
+</html>

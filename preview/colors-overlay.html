@@ -1,0 +1,49 @@
+<!doctype html>
+<!-- @dsCard group="Colors" name="Colors — AI overlay accents" subtitle="Reserved for AI output only" viewport="700x200" -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Colors · AI overlay accents</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 24px; background: var(--rs-bg); }
+  .head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 14px; }
+  .row { display:grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .cell { border-radius: var(--rs-radius-md); padding: 16px; height: 96px; display:flex; flex-direction: column; justify-content: space-between; color: #FFF; }
+  .name { font-size: 13px; font-weight: 500; }
+  .desc { font-family: var(--rs-font-mono); font-size: 11px; opacity: 0.85; }
+  .var  { font-family: var(--rs-font-mono); font-size: 10px; letter-spacing: 0.05em; opacity: 0.85; }
+</style>
+</head>
+<body class="rs-root">
+  <div class="head">
+    <div>
+      <div class="rs-eyebrow">AI OVERLAY · RESERVED ACCENTS</div>
+      <div style="font-size:13px;color:var(--rs-fg-muted);margin-top:4px">Used only for AI output (heatmaps, vessel traces, AI badges). Never general UI.</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="cell" style="background:var(--rs-overlay-magenta)">
+      <div>
+        <div class="name">Magenta</div>
+        <div class="desc">Grad-CAM lesion heatmap</div>
+      </div>
+      <div class="var">--rs-overlay-magenta · #C9377F</div>
+    </div>
+    <div class="cell" style="background:var(--rs-overlay-cyan)">
+      <div>
+        <div class="name">Cyan</div>
+        <div class="desc">Vessel segmentation trace</div>
+      </div>
+      <div class="var">--rs-overlay-cyan · #1FA2A3</div>
+    </div>
+    <div class="cell" style="background:var(--rs-overlay-violet)">
+      <div>
+        <div class="name">Violet</div>
+        <div class="desc">AI-generated badge</div>
+      </div>
+      <div class="var">--rs-overlay-violet · #6E4FBF</div>
+    </div>
+  </div>
+</body>
+</html>
