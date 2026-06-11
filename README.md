@@ -48,7 +48,10 @@ assets/
   fundus-sample-heatmap.svg← placeholder Grad-CAM overlay
   vessel-mask.svg          ← placeholder vessel segmentation
 preview/                   ← design-system cards (registered to Design System tab)
-ui_kits/
+apps/web/
+  index.html               ← entry point (redirects to landing/)
+  landing/                 ← Landing & sign-in (profile selection: doctor · student · admin)
+    {index.html, app.jsx, app.css, README.md}
   _shared.jsx              ← Logo, Icon, RailBrand, RailItem, RailUser, TopBar, Pill, SeverityBar
   _shell.css               ← shared rail / topbar / button / pill chrome
   doctor/                  ← Clinical Diagnosis (queue · dark canvas · AI panel · report)

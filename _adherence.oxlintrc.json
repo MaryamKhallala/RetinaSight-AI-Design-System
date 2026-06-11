@@ -17,10 +17,10 @@
           {
             "group": [
               "lib/**",
-              "ui_kits/admin/**",
-              "ui_kits/doctor/**",
-              "ui_kits/settings/**",
-              "ui_kits/student/**"
+              "apps/web/admin/**",
+              "apps/web/doctor/**",
+              "apps/web/settings/**",
+              "apps/web/student/**"
             ],
             "message": "Import design-system components from 'index.js', not component internals."
           }

@@ -24,4 +24,4 @@ Sections shown depend on the profile's role.
 | `index.html` | Shell — loads `lib/monitoring.js` then React |
 | `app.jsx` | All sections (Account, Models, Viz, Datasets, Theme, Notify, Monitor, Integrations) |
 | `app.css` | Settings-specific layout (rail, rows, toggles, segmented controls, theme/colormap pickers) |
-| `../../lib/monitoring.js` | Sentry bootstrap (no-op without DSN) |
+| `../../../lib/monitoring.js` | Sentry bootstrap (no-op without DSN) |

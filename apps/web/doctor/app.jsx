@@ -49,7 +49,7 @@ function CaseStrip({ cases, activeId, onPick }) {
       </div>
       {cases.map(c => (
         <button key={c.id} className={`case-chip ${c.id === activeId ? 'on' : ''}`} onClick={() => onPick(c.id)}>
-          <div className="thumb"><img src="../../assets/fundus-sample-1.svg" alt="" /></div>
+          <div className="thumb"><img src="../../../assets/fundus-sample-1.svg" alt="" /></div>
           <div className="meta">
             <span className="id">{c.id} · {c.laterality}</span>
             <span className="nm">{c.patient}, {c.age}{c.sex}</span>
@@ -78,7 +78,7 @@ function UploadView({ cases, onCreated, onOpen }) {
     if (!f) return;
     setFile({ name: f.name, size: (f.size/1024/1024).toFixed(1) + ' Mo' });
     if (f.type && f.type.startsWith('image/')) setPreview(URL.createObjectURL(f));
-    else setPreview('../../assets/fundus-sample-1.svg');
+    else setPreview('../../../assets/fundus-sample-1.svg');
   };
   const onDrop = (e) => { e.preventDefault(); setDrag(false); accept(e.dataTransfer.files && e.dataTransfer.files[0]); };
 
@@ -155,7 +155,7 @@ function UploadView({ cases, onCreated, onOpen }) {
       <div className="upload-recent">
         {cases.slice(0, 4).map(c => (
           <div key={c.id} className="recent-row">
-            <div className="recent-thumb"><img src="../../assets/fundus-sample-1.svg" alt=""/></div>
+            <div className="recent-thumb"><img src="../../../assets/fundus-sample-1.svg" alt=""/></div>
             <div style={{ flex: 1 }}>
               <span className="mono" style={{ fontSize: 12.5, fontWeight: 500 }}>{c.id} · {c.laterality}</span>
               <div className="mono" style={{ fontSize: 11, color: 'var(--rs-fg-muted)' }}>{c.acquired.split(' ')[1]} · {c.device}</div>
@@ -392,9 +392,9 @@ function StudyViewer({ caseData, onStatus }) {
 
         <div className="canvas-stage">
           <div className="canvas-img" style={{ transform: `scale(${zoom})` }}>
-            <img src="../../assets/fundus-sample-1.svg" alt="fundus" />
-            {overlays.heatmap && <img className="ovl heatmap" src="../../assets/fundus-sample-heatmap.svg" alt="" />}
-            {overlays.vessels && <img className="ovl vessels" src="../../assets/vessel-mask.svg" alt="" />}
+            <img src="../../../assets/fundus-sample-1.svg" alt="fundus" />
+            {overlays.heatmap && <img className="ovl heatmap" src="../../../assets/fundus-sample-heatmap.svg" alt="" />}
+            {overlays.vessels && <img className="ovl vessels" src="../../../assets/vessel-mask.svg" alt="" />}
             {overlays.boxes && (
               <svg className="ovl" viewBox="0 0 400 400">
                 <rect x="210" y="150" width="40" height="30" fill="none" stroke="#FFD25A" strokeWidth="1.5" strokeDasharray="3 2"/>

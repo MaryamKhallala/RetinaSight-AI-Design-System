@@ -68,7 +68,7 @@ function QueuePage({ cases, onOpen }) {
             {rows.map(c => (
               <tr key={c.id} onClick={() => onOpen(c.id)}>
                 <td><div className="row" style={{ gap: 10 }}>
-                  <div className="dthumb"><img src="../../assets/fundus-sample-1.svg" alt=""/></div>
+                  <div className="dthumb"><img src="../../../assets/fundus-sample-1.svg" alt=""/></div>
                   <span className="mono" style={{ fontWeight: 500 }}>{c.id} · {c.laterality}</span>
                 </div></td>
                 <td>{c.patient}, {c.age}{c.sex}</td>
@@ -209,7 +209,7 @@ function AtlasPage() {
         {ATLAS.map(a => (
           <div key={a.key} className="atlas-card">
             <div className="atlas-fig" style={{ borderColor: a.color }}>
-              <img src="../../assets/fundus-sample-1.svg" alt=""/>
+              <img src="../../../assets/fundus-sample-1.svg" alt=""/>
               <span className="atlas-tag" style={{ background: a.color }}>{L(a.fr, a.en)}</span>
             </div>
             <div className="atlas-body">

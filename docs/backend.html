@@ -57,10 +57,10 @@
   <table>
     <thead><tr><th>Profil</th><th>Écran</th><th>Rôle principal</th></tr></thead>
     <tbody>
-      <tr><td><b>Docteur</b></td><td><code>ui_kits/doctor/index.html</code></td><td>Téléverser une image, lire le grade IA, signer le rapport</td></tr>
-      <tr><td><b>Étudiant</b></td><td><code>ui_kits/student/index.html</code></td><td>Simulateur de cas, progression</td></tr>
-      <tr><td><b>Admin</b></td><td><code>ui_kits/admin/index.html</code></td><td>Utilisateurs, jeux de données, modèles</td></tr>
-      <tr><td><b>Réglages</b></td><td><code>ui_kits/settings/index.html?profile=…</code></td><td>Compte, modèles, 3D, thèmes, monitoring</td></tr>
+      <tr><td><b>Docteur</b></td><td><code>apps/web/doctor/index.html</code></td><td>Téléverser une image, lire le grade IA, signer le rapport</td></tr>
+      <tr><td><b>Étudiant</b></td><td><code>apps/web/student/index.html</code></td><td>Simulateur de cas, progression</td></tr>
+      <tr><td><b>Admin</b></td><td><code>apps/web/admin/index.html</code></td><td>Utilisateurs, jeux de données, modèles</td></tr>
+      <tr><td><b>Réglages</b></td><td><code>apps/web/settings/index.html?profile=…</code></td><td>Compte, modèles, 3D, thèmes, monitoring</td></tr>
     </tbody>
   </table>
 
@@ -164,8 +164,8 @@ async listCases() {
   <p>Pour démarrer petit : un seul service FastAPI + une base PostgreSQL avec les 6 tables ci-dessus suffisent à reproduire l'API de <code>OctopusDB</code>. L'inférence peut d'abord renvoyer une réponse simulée (comme <code>infer()</code>) avant de brancher le vrai modèle.</p>
 
   <div class="lnk">
-    <a href="../ui_kits/doctor/index.html?view=upload">→ Tester : Téléverser une image</a>
-    <a href="../ui_kits/doctor/index.html">→ Ouvrir l'interface docteur</a>
+    <a href="../apps/web/doctor/index.html?view=upload">→ Tester : Téléverser une image</a>
+    <a href="../apps/web/doctor/index.html">→ Ouvrir l'interface docteur</a>
   </div>
 </div>
 </body>

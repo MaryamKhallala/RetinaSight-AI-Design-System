@@ -202,7 +202,10 @@ const RailUser = ({ initials, name, role, email, profile = 'doctor' }) => {
 
           <div className="um-sep"/>
 
-          <button className="um-item um-danger" role="menuitem">
+          <button className="um-item um-danger" role="menuitem" onClick={() => {
+            if (window.OctopusAuth) window.OctopusAuth.logout();
+            location.href = '../landing/index.html';
+          }}>
             <Icon name="arrowR" />
             <span className="um-lbl">{T('usermenu.signout')}</span>
           </button>

@@ -10,8 +10,8 @@
    they are NOT pulled in here so consumers don't pay for layout
    they don't use. Import the ones you need, e.g.:
 
-       <link rel="stylesheet" href="ui_kits/doctor/app.css">
+       <link rel="stylesheet" href="apps/web/doctor/app.css">
    ============================================================ */
 
 @import url("colors_and_type.css");   /* design tokens: color, type, spacing, radius, shadow, motion */
-@import url("ui_kits/_shell.css");     /* shared app chrome: rail, top bar, buttons, pills, user menu */
+@import url("apps/web/_shell.css");    /* shared app chrome: rail, top bar, buttons, pills, user menu */

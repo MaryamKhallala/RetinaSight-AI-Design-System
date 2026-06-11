@@ -12,7 +12,7 @@ Octopus AI is a multi-role clinical intelligence platform for the detection, dia
 
 1. **Read `README.md`** in this skill folder. It is the canonical source for product context, content fundamentals (voice, tone, casing, vibe), visual foundations (color, type, spacing, motion, hover/press, borders, shadows, radii, density), and iconography rules.
 2. **Read `colors_and_type.css`.** All design tokens live there as CSS custom properties: brand teal ramp, warm graphite ink neutrals, the 5-step **severity ramp** (Grade 0 → Proliferative DR), AI overlay colors, dark-canvas family, type stack, spacing scale, radii, shadows, motion durations, focus ring.
-3. **Browse the UI kits** in `ui_kits/{doctor,student,admin}/`. Each has its own README, an `index.html` with a working interactive prototype, an `app.jsx`, and an `app.css`. Shared chrome (rail, top bar, brand mark, icons, pills, severity bars) is in `ui_kits/_shared.jsx` and `ui_kits/_shell.css`.
+3. **Browse the UI kits** in `apps/web/{landing,doctor,student,admin}/`. Each has its own README, an `index.html` with a working interactive prototype, an `app.jsx`, and an `app.css`. The platform entry point is `apps/web/landing/` (sign-in with profile selection — doctor / student / admin, session via `lib/auth.js`); the other surfaces require the matching profile. Shared chrome (rail, top bar, brand mark, icons, pills, severity bars) is in `apps/web/_shared.jsx` and `apps/web/_shell.css`.
 4. **Browse the design-system cards** in `preview/` for at-a-glance specimens of typography, color, spacing, components, and brand.
 
 ## Working modes

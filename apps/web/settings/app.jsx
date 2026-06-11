@@ -12,7 +12,8 @@ const PROFILES = {
 };
 
 const params = new URLSearchParams(location.search);
-const PROFILE_KEY = params.get('profile') || 'doctor';
+const SESSION = (window.OctopusAuth && window.OctopusAuth.getSession()) || null;
+const PROFILE_KEY = params.get('profile') || (SESSION && SESSION.role) || 'doctor';
 const PROFILE = PROFILES[PROFILE_KEY] || PROFILES.doctor;
 
 const LANG = (window.octopusI18n && window.octopusI18n.getLang()) || 'fr';

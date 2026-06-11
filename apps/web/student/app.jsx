@@ -97,8 +97,8 @@ function CaseSimulator({ caseData, onNext }) {
       <div className="sim-body">
         <div className="col" style={{ gap: 14 }}>
           <div className="sim-image">
-            <img src="../../assets/fundus-sample-1.svg" alt="" />
-            {stage >= 4 && <img className="ovl" src="../../assets/fundus-sample-heatmap.svg" alt="" style={{ position:'absolute', inset:0, width:'100%', height:'100%', mixBlendMode:'screen', opacity:0.55, borderRadius:'inherit' }}/>}
+            <img src="../../../assets/fundus-sample-1.svg" alt="" />
+            {stage >= 4 && <img className="ovl" src="../../../assets/fundus-sample-heatmap.svg" alt="" style={{ position:'absolute', inset:0, width:'100%', height:'100%', mixBlendMode:'screen', opacity:0.55, borderRadius:'inherit' }}/>}
             <div className="sim-image-meta mono">{c.id} · {c.laterality}</div>
           </div>
           <div className="card">
@@ -215,7 +215,7 @@ function LibraryView({ cases, onPick }) {
       <div className="lib-grid">
         {cases.map(c => (
           <button key={c.id} className="lib-card" onClick={() => onPick(c.id)}>
-            <div className="lib-thumb"><img src="../../assets/fundus-sample-1.svg" alt=""/></div>
+            <div className="lib-thumb"><img src="../../../assets/fundus-sample-1.svg" alt=""/></div>
             <div className="lib-body">
               <div className="row" style={{ justifyContent:'space-between' }}>
                 <span className="mono" style={{ fontSize:12, fontWeight:500 }}>{c.id} · {c.laterality}</span>
