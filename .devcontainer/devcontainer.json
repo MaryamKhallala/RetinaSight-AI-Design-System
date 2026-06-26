@@ -1,0 +1,20 @@
+{
+  "name": "Octopus AI",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python"]
+    }
+  },
+  "forwardPorts": [8000, 8080],
+  "portsAttributes": {
+    "8000": {
+      "label": "Octopus — Front (accueil)",
+      "onAutoForward": "openPreview"
+    },
+    "8080": {
+      "label": "Octopus — Front via Docker/nginx"
+    }
+  },
+  "postCreateCommand": "echo '✅ Codespace pret. Demarre le front avec :  python serve.py'"
+}

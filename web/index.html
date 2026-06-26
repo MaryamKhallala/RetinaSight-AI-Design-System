@@ -1,0 +1,280 @@
+<!doctype html>
+<!-- @dsCard group="Web — Landing" name="Landing + Auth" subtitle="Accueil + connexion · choix de profil obligatoire → redirige vers l'espace" viewport="1440x900" -->
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Octopus · Connexion</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  html, body { margin:0; height:100%; }
+  body.rs-root { overflow:hidden; }
+  #root { height:100%; }
+</style>
+</head>
+<body class="rs-root">
+<div id="root"></div>
+<script src="../lib/i18n.js"></script>
+<script src="../lib/db.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel">
+const { useState } = React;
+const L = (fr, en) => (window.octopusI18n && window.octopusI18n.getLang() === 'en') ? en : fr;
+
+const DEST = {
+  doctor:  'doctor/index.html',
+  student: 'student/index.html',
+  admin:   'admin/index.html',
+};
+const PROFILES = [
+  { key:'doctor',  fr:'Docteur',   en:'Doctor',  descFr:'Diagnostic clinique assisté par IA', descEn:'AI-assisted clinical diagnosis',
+    demoName:'Dr. Amina Saidi', demoEmail:'amina.saidi@chu-rabat.ma', accent:'var(--rs-teal-600)' },
+  { key:'student', fr:'Étudiant',  en:'Student', descFr:'Apprentissage par cas & simulation', descEn:'Case-based learning & simulation',
+    demoName:'Omar Kabbaj', demoEmail:'omar.k@um6p-edu.ma', accent:'#3D5FB8' },
+  { key:'admin',   fr:'Admin',     en:'Admin',   descFr:'Données, modèles & gouvernance', descEn:'Datasets, models & governance',
+    demoName:'Mehdi El Otmani', demoEmail:'m.otmani@octopus.ai', accent:'#7E3F8C' },
+];
+
+function Logo({ size=40 }) {
+  return (
+    <svg viewBox="0 0 64 64" width={size} height={size} fill="none">
+      <circle cx="32" cy="32" r="28" stroke="currentColor" strokeWidth="2"/>
+      <circle cx="32" cy="32" r="20" stroke="currentColor" strokeWidth="1.5" opacity="0.5"/>
+      <circle cx="32" cy="32" r="12" stroke="currentColor" strokeWidth="1.25" opacity="0.35"/>
+      <path d="M32 4 C 18 18, 18 46, 32 60" stroke="currentColor" strokeWidth="1.25" opacity="0.55" strokeLinecap="round"/>
+      <path d="M32 4 C 46 18, 46 46, 32 60" stroke="currentColor" strokeWidth="1.25" opacity="0.55" strokeLinecap="round"/>
+      <circle cx="32" cy="32" r="3.5" fill="currentColor"/>
+    </svg>
+  );
+}
+
+function App() {
+  const [role, setRole] = useState(null);          // profil OBLIGATOIRE
+  const [email, setEmail] = useState('');
+  const [pwd, setPwd] = useState('');
+  const [touched, setTouched] = useState(false);
+  const lang = (window.octopusI18n && window.octopusI18n.getLang()) || 'fr';
+
+  const chosen = PROFILES.find(p => p.key === role);
+  const valid = !!role && email.trim().length > 3 && pwd.length > 0;
+
+  const fillDemo = (p) => { setRole(p.key); setEmail(p.demoEmail); setPwd('demo'); };
+
+  const submit = (e) => {
+    e.preventDefault();
+    setTouched(true);
+    if (!valid) return;
+    window.OctopusDB.login({ email, role, name: chosen ? chosen.demoName : undefined });
+    window.location.href = DEST[role];
+  };
+
+  const toggleLang = () => window.octopusI18n.setLang(lang === 'fr' ? 'en' : 'fr');
+
+  return (
+    <div className="land">
+      {/* ---- left: brand / value ---- */}
+      <aside className="land-hero">
+        <div className="land-hero-top">
+          <div className="brand">
+            <span className="brand-mark"><Logo size={34}/></span>
+            <div>
+              <div className="brand-name">Octopus</div>
+              <div className="brand-tag">CLINIQUE · IA</div>
+            </div>
+          </div>
+          <button className="lang-btn" onClick={toggleLang} title="FR / EN">{lang === 'fr' ? '🇬🇧 EN' : '🇫🇷 FR'}</button>
+        </div>
+
+        <div className="land-hero-mid">
+          <h1>{L('Diagnostic rétinien, augmenté par l’IA.', 'Retinal diagnosis, augmented by AI.')}</h1>
+          <p>{L('Détection et gradation de la rétinopathie diabétique, apprentissage par cas, et gouvernance de la plateforme — en un seul espace.',
+                'Detection and grading of diabetic retinopathy, case-based learning, and platform governance — in one place.')}</p>
+          <div className="land-stats">
+            <div><b>AUC 0.987</b><span>{L('grading RD','DR grading')}</span></div>
+            <div><b>≤ 5 s</b><span>{L('inférence / image','inference / image')}</span></div>
+            <div><b>3</b><span>{L('profils','profiles')}</span></div>
+          </div>
+        </div>
+
+        <div className="land-fundus" aria-hidden="true">
+          <img src="../assets/fundus-sample-1.svg" alt=""/>
+          <img className="ovl" src="../assets/vessel-mask.svg" alt=""/>
+        </div>
+      </aside>
+
+      {/* ---- right: auth ---- */}
+      <main className="land-auth">
+        <form className="auth-card" onSubmit={submit}>
+          <div className="auth-head">
+            <h2>{L('Connexion', 'Sign in')}</h2>
+            <p>{L('Sélectionnez votre profil pour accéder à votre espace.', 'Select your profile to access your workspace.')}</p>
+          </div>
+
+          {/* PROFIL — OBLIGATOIRE */}
+          <div className="auth-field">
+            <label className="auth-label">{L('Profil', 'Profile')} <span className="req">*</span></label>
+            <div className="profiles">
+              {PROFILES.map(p => (
+                <button type="button" key={p.key}
+                  className={`profile ${role === p.key ? 'on' : ''}`}
+                  style={role === p.key ? { '--acc': p.accent } : undefined}
+                  onClick={() => setRole(p.key)}>
+                  <span className="profile-ico" style={{ background:`${p.accent}1f`, color:p.accent }}>
+                    {p.key === 'doctor' ? '🩺' : p.key === 'student' ? '🎓' : '🛠️'}
+                  </span>
+                  <span className="profile-txt">
+                    <span className="profile-name">{L(p.fr, p.en)}</span>
+                    <span className="profile-desc">{L(p.descFr, p.descEn)}</span>
+                  </span>
+                  <span className="profile-check" style={{ borderColor:p.accent, background: role===p.key ? p.accent : 'transparent' }}>
+                    {role === p.key ? '✓' : ''}
+                  </span>
+                </button>
+              ))}
+            </div>
+            {touched && !role && <div className="auth-err">{L('Veuillez choisir un profil.', 'Please choose a profile.')}</div>}
+          </div>
+
+          <div className="auth-field">
+            <label className="auth-label">{L('E-mail', 'Email')}</label>
+            <input className="auth-input" type="email" autoComplete="username"
+              placeholder={chosen ? chosen.demoEmail : 'nom@etablissement.ma'}
+              value={email} onChange={e => setEmail(e.target.value)} />
+          </div>
+
+          <div className="auth-field">
+            <label className="auth-label">{L('Mot de passe', 'Password')}</label>
+            <input className="auth-input" type="password" autoComplete="current-password"
+              placeholder="••••••••" value={pwd} onChange={e => setPwd(e.target.value)} />
+          </div>
+
+          <button type="submit" className={`auth-submit ${valid ? '' : 'disabled'}`}>
+            {chosen
+              ? L(`Continuer vers l’espace ${chosen.fr}`, `Continue to ${chosen.en} workspace`)
+              : L('Choisissez un profil pour continuer', 'Choose a profile to continue')}
+            <span className="arr">→</span>
+          </button>
+
+          <div className="auth-demo">
+            <span>{L('Accès démo rapide :', 'Quick demo access:')}</span>
+            {PROFILES.map(p => (
+              <button type="button" key={p.key} className="demo-chip" onClick={() => fillDemo(p)}>{L(p.fr, p.en)}</button>
+            ))}
+          </div>
+
+          <div className="auth-foot">
+            {L('Démo — aucun mot de passe vérifié. En production : SSO Okta + 2FA.',
+               'Demo — no password is checked. Production: Okta SSO + 2FA.')}
+          </div>
+        </form>
+      </main>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+
+<style>
+.land {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  height: 100vh;
+  font-family: var(--rs-font-sans);
+  background: var(--rs-bg);
+}
+@media (max-width: 880px) { .land { grid-template-columns: 1fr; } .land-hero { display:none; } }
+
+/* hero */
+.land-hero {
+  position: relative;
+  background:
+    radial-gradient(120% 90% at 15% 10%, rgba(45,140,140,.18), transparent 55%),
+    linear-gradient(160deg, var(--rs-canvas-900), var(--rs-canvas-800));
+  color: var(--rs-canvas-fg);
+  padding: 40px 48px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  overflow: hidden;
+}
+.land-hero-top { display:flex; align-items:center; justify-content:space-between; z-index:2; }
+.brand { display:flex; align-items:center; gap:12px; }
+.brand-mark { color:#BFE6E5; display:flex; }
+.brand-name { font-size:20px; font-weight:600; letter-spacing:-0.01em; line-height:1; }
+.brand-tag { font-family:var(--rs-font-mono); font-size:9px; letter-spacing:0.22em; color:var(--rs-canvas-fg-mute); margin-top:4px; }
+.lang-btn {
+  font-family:var(--rs-font-mono); font-size:12px; color:var(--rs-canvas-fg);
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16);
+  border-radius:var(--rs-radius-pill); padding:6px 12px; cursor:pointer;
+}
+.lang-btn:hover { background:rgba(255,255,255,.14); }
+.land-hero-mid { z-index:2; max-width:520px; }
+.land-hero-mid h1 { font-size:42px; line-height:1.12; letter-spacing:-0.025em; font-weight:700; margin:0; }
+.land-hero-mid p { font-size:17px; line-height:1.6; color:var(--rs-canvas-fg-mute); margin:18px 0 0; }
+.land-stats { display:flex; gap:34px; margin-top:34px; }
+.land-stats > div { display:flex; flex-direction:column; }
+.land-stats b { font-family:var(--rs-font-mono); font-size:24px; color:#BFE6E5; font-weight:600; }
+.land-stats span { font-size:12px; color:var(--rs-canvas-fg-mute); margin-top:4px; }
+.land-fundus {
+  position:absolute; right:-120px; bottom:-120px; width:440px; height:440px;
+  border-radius:50%; overflow:hidden; opacity:.5;
+  box-shadow:0 0 120px rgba(0,0,0,.6); z-index:1;
+}
+.land-fundus img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.land-fundus .ovl { mix-blend-mode:screen; opacity:.85; }
+
+/* auth */
+.land-auth { display:flex; align-items:center; justify-content:center; padding:32px; background:var(--rs-bg); }
+.auth-card { width:100%; max-width:430px; display:flex; flex-direction:column; gap:18px; }
+.auth-head h2 { font-size:26px; font-weight:600; letter-spacing:-0.02em; margin:0; color:var(--rs-fg); }
+.auth-head p { font-size:14px; color:var(--rs-fg-muted); margin:6px 0 0; }
+.auth-field { display:flex; flex-direction:column; gap:8px; }
+.auth-label { font-size:12.5px; font-weight:500; color:var(--rs-ink-900); }
+.auth-label .req { color:var(--rs-grade-4); }
+
+.profiles { display:flex; flex-direction:column; gap:8px; }
+.profile {
+  display:flex; align-items:center; gap:12px; text-align:left;
+  padding:12px 14px; border:1px solid var(--rs-border); border-radius:var(--rs-radius-md);
+  background:var(--rs-bg-raised); cursor:pointer; font-family:inherit;
+  transition:border-color var(--rs-dur-fast) var(--rs-ease-out), background var(--rs-dur-fast) var(--rs-ease-out);
+}
+.profile:hover { background:var(--rs-bg-sunken); }
+.profile.on { border-color:var(--acc); box-shadow:0 0 0 1px var(--acc); background:var(--rs-bg-raised); }
+.profile-ico { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.profile-txt { display:flex; flex-direction:column; flex:1; min-width:0; }
+.profile-name { font-size:15px; font-weight:600; color:var(--rs-fg); }
+.profile-desc { font-size:12.5px; color:var(--rs-fg-muted); margin-top:2px; }
+.profile-check { width:22px; height:22px; border-radius:50%; border:1.5px solid var(--rs-border-strong);
+  display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px; flex-shrink:0; }
+
+.auth-input {
+  padding:11px 13px; border:1px solid var(--rs-border); border-radius:var(--rs-radius-md);
+  background:var(--rs-bg-raised); font-family:inherit; font-size:14px; color:var(--rs-ink-900);
+}
+.auth-input:focus { outline:none; border-color:var(--rs-teal-600); box-shadow:0 0 0 3px var(--rs-focus-ring); }
+.auth-err { font-size:12px; color:var(--rs-grade-4); }
+
+.auth-submit {
+  margin-top:4px; display:flex; align-items:center; justify-content:center; gap:10px;
+  padding:13px 18px; border:0; border-radius:var(--rs-radius-md);
+  background:var(--rs-teal-600); color:#fff; font-family:inherit; font-size:15px; font-weight:600;
+  cursor:pointer; transition:background var(--rs-dur-fast) var(--rs-ease-out);
+}
+.auth-submit:hover { background:var(--rs-teal-700); }
+.auth-submit .arr { transition:transform var(--rs-dur-fast) var(--rs-ease-out); }
+.auth-submit:hover .arr { transform:translateX(3px); }
+.auth-submit.disabled { background:var(--rs-ink-300); cursor:not-allowed; }
+.auth-submit.disabled:hover .arr { transform:none; }
+
+.auth-demo { display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:12.5px; color:var(--rs-fg-muted); }
+.demo-chip {
+  font-family:inherit; font-size:12px; padding:4px 11px; border-radius:var(--rs-radius-pill);
+  border:1px solid var(--rs-border); background:var(--rs-bg-raised); color:var(--rs-ink-700); cursor:pointer;
+}
+.demo-chip:hover { background:var(--rs-teal-50); border-color:var(--rs-teal-300); color:var(--rs-teal-800); }
+.auth-foot { font-size:11.5px; color:var(--rs-fg-subtle); line-height:1.5; border-top:1px solid var(--rs-hairline); padding-top:14px; }
+</style>
+</body>
+</html>

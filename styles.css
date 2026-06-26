@@ -1,0 +1,17 @@
+/* ============================================================
+   Octopus AI — Design System root stylesheet
+   Single entry point for consuming apps. Import this one file
+   and you get the tokens + all shared UI-kit chrome.
+
+       <link rel="stylesheet" href="styles.css">
+
+   The per-kit app.css files (doctor/student/admin/settings) are
+   page-specific layout and are imported by their own index.html;
+   they are NOT pulled in here so consumers don't pay for layout
+   they don't use. Import the ones you need, e.g.:
+
+       <link rel="stylesheet" href="web/doctor/app.css">
+   ============================================================ */
+
+@import url("colors_and_type.css");   /* design tokens: color, type, spacing, radius, shadow, motion */
+@import url("web/_shell.css");     /* shared app chrome: rail, top bar, buttons, pills, user menu */

@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  
+  <defs>
+    <radialGradient id="fundus" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#9C5F2F"></stop>
+      <stop offset="35%" stop-color="#7A3F1A"></stop>
+      <stop offset="80%" stop-color="#42200B"></stop>
+      <stop offset="100%" stop-color="#1A0A04"></stop>
+    </radialGradient>
+    <radialGradient id="disc" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#F4D7A0"></stop>
+      <stop offset="60%" stop-color="#E0AB66"></stop>
+      <stop offset="100%" stop-color="#9C5F2F" stop-opacity="0"></stop>
+    </radialGradient>
+    <radialGradient id="macula" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#3A1505" stop-opacity="0.6"></stop>
+      <stop offset="100%" stop-color="#3A1505" stop-opacity="0"></stop>
+    </radialGradient>
+    <clipPath id="circle">
+      <circle cx="200" cy="200" r="195"></circle>
+    </clipPath>
+  </defs>
+  <rect width="400" height="400" fill="#000"></rect>
+  <g clip-path="url(#circle)">
+    <rect width="400" height="400" fill="url(#fundus)"></rect>
+    
+    <circle cx="135" cy="190" r="32" fill="url(#disc)"></circle>
+    <circle cx="135" cy="190" r="14" fill="#FBE6B3" opacity="0.85"></circle>
+    
+    <circle cx="240" cy="210" r="42" fill="url(#macula)"></circle>
+    
+    <g fill="none" stroke="#5A2310" stroke-linecap="round" opacity="0.85">
+      <path d="M135 190 Q 180 110, 320 60" stroke-width="3"></path>
+      <path d="M135 190 Q 180 270, 320 340" stroke-width="3"></path>
+      <path d="M135 190 Q 90 130, 40 70" stroke-width="2.5"></path>
+      <path d="M135 190 Q 90 250, 40 330" stroke-width="2.5"></path>
+      
+      <path d="M180 130 Q 220 90, 280 80" stroke-width="1.6"></path>
+      <path d="M210 145 Q 260 130, 310 130" stroke-width="1.4"></path>
+      <path d="M180 250 Q 220 290, 280 320" stroke-width="1.6"></path>
+      <path d="M210 235 Q 260 250, 310 260" stroke-width="1.4"></path>
+      <path d="M100 150 Q 70 120, 50 90" stroke-width="1.4"></path>
+      <path d="M100 230 Q 70 260, 50 290" stroke-width="1.4"></path>
+    </g>
+    <g fill="none" stroke="#992E1B" stroke-linecap="round" opacity="0.7">
+      <path d="M135 190 Q 175 105, 320 50" stroke-width="2"></path>
+      <path d="M135 190 Q 175 275, 320 350" stroke-width="2"></path>
+      <path d="M135 190 Q 95 125, 45 60" stroke-width="1.5"></path>
+      <path d="M135 190 Q 95 255, 45 320" stroke-width="1.5"></path>
+    </g>
+    
+    <g fill="#5A1408" opacity="0.85">
+      <circle cx="220" cy="160" r="2.4"></circle>
+      <circle cx="270" cy="180" r="1.8"></circle>
+      <circle cx="290" cy="220" r="2.6"></circle>
+      <circle cx="180" cy="270" r="1.8"></circle>
+      <circle cx="245" cy="280" r="2.2"></circle>
+      <circle cx="305" cy="155" r="1.6"></circle>
+      <circle cx="160" cy="115" r="1.4"></circle>
+      <circle cx="320" cy="280" r="2"></circle>
+    </g>
+    
+    <g fill="#FFE486" opacity="0.85">
+      <circle cx="225" cy="195" r="2.6"></circle>
+      <circle cx="265" cy="225" r="1.8"></circle>
+      <circle cx="200" cy="245" r="1.6"></circle>
+      <circle cx="285" cy="195" r="1.4"></circle>
+    </g>
+    
+    <ellipse cx="200" cy="200" rx="200" ry="200" fill="#000" opacity="0.05"></ellipse>
+  </g>
+</svg>

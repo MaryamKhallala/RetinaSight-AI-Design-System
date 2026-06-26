@@ -1,0 +1,283 @@
+/* ============================================================
+   RetinaSight AI — Design Tokens
+   Colors, typography, spacing, radii, shadows, motion.
+   Imported by every preview card and UI kit in this system.
+   ============================================================ */
+
+/* ---- Webfonts (Google Fonts) ----
+   IBM Plex Sans  — UI, body, headings
+   IBM Plex Mono  — IDs, measurements, code, data
+   Instrument Serif — display / quote moments
+*/
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap");
+
+:root {
+  /* ============================================================
+     COLOR — Brand
+     The "Ocular Teal" is the primary brand hue, modeled in OKLCH
+     so that the tints/shades stay perceptually even.
+     ============================================================ */
+  --rs-teal-50:  oklch(97% 0.018 195);
+  --rs-teal-100: oklch(94% 0.035 195);
+  --rs-teal-200: oklch(88% 0.060 195);
+  --rs-teal-300: oklch(80% 0.090 195);
+  --rs-teal-400: oklch(68% 0.110 195);
+  --rs-teal-500: oklch(58% 0.115 195);   /* hero brand */
+  --rs-teal-600: oklch(48% 0.105 195);   /* primary action */
+  --rs-teal-700: oklch(38% 0.085 195);
+  --rs-teal-800: oklch(28% 0.060 195);
+  --rs-teal-900: oklch(20% 0.040 200);
+
+  /* Brand wordmark color */
+  --rs-brand:    var(--rs-teal-700);
+  --rs-brand-ink:#0A3D3E;
+
+  /* ============================================================
+     COLOR — Neutrals (warm graphite, not pure gray)
+     Used for app chrome, body text, dividers.
+     ============================================================ */
+  --rs-ink-50:  #F7F6F2;   /* page background, warm */
+  --rs-ink-100: #EFEEE8;   /* surface raised */
+  --rs-ink-150: #E5E3DB;   /* hairline / chip bg */
+  --rs-ink-200: #D6D3C8;   /* border */
+  --rs-ink-300: #B5B1A4;   /* disabled */
+  --rs-ink-400: #8B8779;   /* muted text */
+  --rs-ink-500: #6B6759;   /* secondary text */
+  --rs-ink-700: #3A382F;   /* primary text */
+  --rs-ink-900: #15140F;   /* heading / max contrast */
+
+  /* ============================================================
+     COLOR — Image canvas (dark surface)
+     Fundus & vessel imagery is read on near-black, like a
+     radiology workstation. This is its own surface family.
+     ============================================================ */
+  --rs-canvas-900: #0A0F14;
+  --rs-canvas-800: #11181F;
+  --rs-canvas-700: #1A222B;
+  --rs-canvas-600: #28323D;
+  --rs-canvas-500: #3D4A57;
+  --rs-canvas-fg:  #E8ECEF;
+  --rs-canvas-fg-mute: #8A95A0;
+
+  /* ============================================================
+     COLOR — Severity (ETDRS / ICDR DR grading scale)
+     The single most important semantic color ramp in the product.
+     Each step is also paired with a tinted background.
+     ============================================================ */
+  --rs-grade-0:    #2F8F6B;   /* No DR — calm green */
+  --rs-grade-0-bg: #E5F2EC;
+  --rs-grade-1:    #C9A227;   /* Mild — amber */
+  --rs-grade-1-bg: #F7EFD4;
+  --rs-grade-2:    #D97A2B;   /* Moderate — burnt orange */
+  --rs-grade-2-bg: #FAE7D5;
+  --rs-grade-3:    #B8482E;   /* Severe — red-orange */
+  --rs-grade-3-bg: #F4DBD2;
+  --rs-grade-4:    #841C25;   /* Proliferative — deep red */
+  --rs-grade-4-bg: #ECCFD2;
+
+  /* ============================================================
+     COLOR — Functional / status
+     ============================================================ */
+  --rs-info:    #2A6FB2;
+  --rs-info-bg: #DFEAF4;
+  --rs-success: #2F8F6B;
+  --rs-warn:    #C9A227;
+  --rs-danger:  #B8482E;
+
+  /* ============================================================
+     COLOR — AI / overlay (heatmap & vessel work)
+     Used sparingly: heatmap accents, vessel traces, AI badges.
+     ============================================================ */
+  --rs-overlay-magenta: #C9377F;   /* Grad-CAM accent */
+  --rs-overlay-violet:  #6E4FBF;   /* AI badge */
+  --rs-overlay-cyan:    #1FA2A3;   /* vessel trace */
+
+  /* ============================================================
+     SEMANTIC ROLES — light theme app
+     ============================================================ */
+  --rs-bg:           var(--rs-ink-50);
+  --rs-bg-raised:    #FFFFFF;
+  --rs-bg-sunken:    var(--rs-ink-100);
+  --rs-fg:           var(--rs-ink-900);
+  --rs-fg-muted:     var(--rs-ink-500);
+  --rs-fg-subtle:    var(--rs-ink-400);
+  --rs-border:       var(--rs-ink-200);
+  --rs-border-strong:var(--rs-ink-300);
+  --rs-hairline:     var(--rs-ink-150);
+  --rs-accent:       var(--rs-teal-600);
+  --rs-accent-hover: var(--rs-teal-700);
+  --rs-accent-soft:  var(--rs-teal-100);
+  --rs-on-accent:    #FFFFFF;
+  --rs-focus-ring:   oklch(58% 0.115 195 / 0.45);
+
+  /* ============================================================
+     TYPE — Families
+     ============================================================ */
+  --rs-font-sans:    "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --rs-font-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --rs-font-serif:   "Instrument Serif", "Times New Roman", serif;
+
+  /* ============================================================
+     TYPE — Scale
+     Designed for clinical density: never below 13px in product.
+     ============================================================ */
+  --rs-text-2xs: 11px;     /* meta / IDs only */
+  --rs-text-xs:  12px;     /* labels, chips */
+  --rs-text-sm:  13px;     /* dense table text */
+  --rs-text-md:  14px;     /* body baseline */
+  --rs-text-base:15px;     /* primary paragraph */
+  --rs-text-lg:  17px;     /* lead, card titles */
+  --rs-text-xl:  20px;     /* section heads */
+  --rs-text-2xl: 24px;     /* page heads */
+  --rs-text-3xl: 32px;     /* dashboard hero */
+  --rs-text-4xl: 44px;     /* marketing hero */
+  --rs-text-5xl: 56px;     /* display */
+
+  --rs-leading-tight:  1.15;
+  --rs-leading-snug:   1.3;
+  --rs-leading-normal: 1.5;
+  --rs-leading-loose:  1.65;
+
+  --rs-tracking-tight: -0.02em;
+  --rs-tracking-snug:  -0.01em;
+  --rs-tracking-flat:  0;
+  --rs-tracking-wide:  0.04em;
+  --rs-tracking-eyebrow: 0.14em;
+
+  /* ============================================================
+     SPACING — 4px base, dense clinical scale
+     ============================================================ */
+  --rs-space-0: 0;
+  --rs-space-1: 4px;
+  --rs-space-2: 8px;
+  --rs-space-3: 12px;
+  --rs-space-4: 16px;
+  --rs-space-5: 20px;
+  --rs-space-6: 24px;
+  --rs-space-7: 32px;
+  --rs-space-8: 40px;
+  --rs-space-9: 56px;
+  --rs-space-10:72px;
+
+  /* ============================================================
+     RADIUS — restrained; no overly-rounded "consumer" curves
+     ============================================================ */
+  --rs-radius-xs: 2px;
+  --rs-radius-sm: 4px;
+  --rs-radius-md: 6px;
+  --rs-radius-lg: 10px;
+  --rs-radius-xl: 14px;
+  --rs-radius-pill: 999px;
+
+  /* ============================================================
+     ELEVATION — soft, layered, never chunky
+     ============================================================ */
+  --rs-shadow-1: 0 1px 0 rgba(20, 20, 15, 0.04), 0 1px 2px rgba(20, 20, 15, 0.06);
+  --rs-shadow-2: 0 1px 0 rgba(20, 20, 15, 0.04), 0 2px 6px rgba(20, 20, 15, 0.08);
+  --rs-shadow-3: 0 2px 0 rgba(20, 20, 15, 0.04), 0 8px 24px rgba(20, 20, 15, 0.10);
+  --rs-shadow-4: 0 12px 40px rgba(20, 20, 15, 0.16);
+  --rs-shadow-inset: inset 0 0 0 1px var(--rs-border);
+  --rs-shadow-focus: 0 0 0 3px var(--rs-focus-ring);
+
+  /* ============================================================
+     MOTION — short, controlled. No bounce.
+     ============================================================ */
+  --rs-ease-out:    cubic-bezier(0.2, 0.8, 0.2, 1);   /* @kind other */
+  --rs-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);     /* @kind other */
+  --rs-dur-instant: 80ms;   /* @kind other */
+  --rs-dur-fast:    140ms;  /* @kind other */
+  --rs-dur-base:    220ms;  /* @kind other */
+  --rs-dur-slow:    360ms;  /* @kind other */
+}
+
+/* ============================================================
+   DARK THEME — image-room mode
+   Used for clinical viewer / dataset reviewer screens.
+   Applied via [data-theme="dark"] on the surface root.
+   ============================================================ */
+[data-theme="dark"] {
+  --rs-bg:        var(--rs-canvas-900);
+  --rs-bg-raised: var(--rs-canvas-800);
+  --rs-bg-sunken: var(--rs-canvas-900);
+  --rs-fg:        var(--rs-canvas-fg);
+  --rs-fg-muted:  var(--rs-canvas-fg-mute);
+  --rs-fg-subtle: #6E7884;
+  --rs-border:    var(--rs-canvas-600);
+  --rs-border-strong: var(--rs-canvas-500);
+  --rs-hairline:  var(--rs-canvas-700);
+  --rs-accent:    var(--rs-teal-400);
+  --rs-accent-hover: var(--rs-teal-300);
+  --rs-accent-soft:  rgba(110, 200, 200, 0.12);
+}
+
+/* ============================================================
+   SEMANTIC ELEMENTS — drop-in defaults
+   These give bare HTML a usable RetinaSight look.
+   ============================================================ */
+.rs-root, .rs-root * {
+  box-sizing: border-box;
+}
+
+.rs-root {
+  font-family: var(--rs-font-sans);
+  font-size: var(--rs-text-base);
+  line-height: var(--rs-leading-normal);
+  color: var(--rs-fg);
+  background: var(--rs-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.rs-root h1 {
+  font-family: var(--rs-font-sans);
+  font-weight: 600;
+  font-size: var(--rs-text-3xl);
+  line-height: var(--rs-leading-tight);
+  letter-spacing: var(--rs-tracking-tight);
+  margin: 0;
+}
+.rs-root h2 {
+  font-weight: 600;
+  font-size: var(--rs-text-2xl);
+  line-height: var(--rs-leading-tight);
+  letter-spacing: var(--rs-tracking-snug);
+  margin: 0;
+}
+.rs-root h3 {
+  font-weight: 600;
+  font-size: var(--rs-text-xl);
+  line-height: var(--rs-leading-snug);
+  letter-spacing: var(--rs-tracking-snug);
+  margin: 0;
+}
+.rs-root h4 {
+  font-weight: 600;
+  font-size: var(--rs-text-lg);
+  line-height: var(--rs-leading-snug);
+  margin: 0;
+}
+.rs-root p { margin: 0; }
+.rs-root code, .rs-root .rs-mono {
+  font-family: var(--rs-font-mono);
+  font-size: 0.92em;
+  font-feature-settings: "ss01", "zero";
+}
+.rs-root .rs-display {
+  font-family: var(--rs-font-serif);
+  font-weight: 400;
+  letter-spacing: var(--rs-tracking-snug);
+}
+.rs-root .rs-eyebrow {
+  font-family: var(--rs-font-mono);
+  font-size: var(--rs-text-2xs);
+  font-weight: 500;
+  letter-spacing: var(--rs-tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--rs-fg-muted);
+}
+.rs-root .rs-meta {
+  font-family: var(--rs-font-mono);
+  font-size: var(--rs-text-xs);
+  color: var(--rs-fg-muted);
+  font-feature-settings: "tnum", "zero";
+}

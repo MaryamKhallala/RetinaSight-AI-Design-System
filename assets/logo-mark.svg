@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" aria-label="Octopus AI mark">
+  
+  <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="2"></circle>
+  <circle cx="32" cy="32" r="20" stroke="currentColor" stroke-width="1.5" opacity="0.5"></circle>
+  <circle cx="32" cy="32" r="12" stroke="currentColor" stroke-width="1.25" opacity="0.35"></circle>
+  
+  <path d="M32 4 C 18 18, 18 46, 32 60" stroke="currentColor" stroke-width="1.25" opacity="0.55" stroke-linecap="round"></path>
+  <path d="M32 4 C 46 18, 46 46, 32 60" stroke="currentColor" stroke-width="1.25" opacity="0.55" stroke-linecap="round"></path>
+  
+  <circle cx="32" cy="32" r="3.5" fill="currentColor"></circle>
+</svg>

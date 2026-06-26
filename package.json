@@ -1,0 +1,11 @@
+{
+  "name": "octopus-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Octopus — plateforme de diagnostic rétinien assistée par IA (design system + UI kits + backend FastAPI).",
+  "scripts": {
+    "start": "npx --yes serve@14 . -l 8000",
+    "dev": "python3 serve.py",
+    "backend": "cd backend && docker compose up --build"
+  }
+}

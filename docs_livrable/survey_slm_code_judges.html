@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Survey — Collaborative Small Language Models as Reliable Code Judges</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal-700:#0F5751; --teal-600:#147a72; --teal-50:#E6F4F2; --teal-100:#cfe9e5;
+    --ink-900:#15140F; --ink-700:#3A382F; --ink-500:#6B6759; --ink-400:#8B8779;
+    --border:#D6D3C8; --hair:#E5E3DB; --paper:#fff; --bg:#F7F6F2;
+    --violet:#6E4FBF; --amber:#C9A227; --green:#2F8F6B; --red:#B8482E;
+    --sans:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",monospace; --serif:"Instrument Serif",Georgia,serif;
+  }
+  * { box-sizing:border-box; }
+  html { background:var(--bg); }
+  body { margin:0; font-family:var(--sans); color:var(--ink-900); line-height:1.6; font-size:15px; -webkit-font-smoothing:antialiased; }
+  .page { max-width:840px; margin:0 auto; background:var(--paper); padding:64px 76px; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+
+  .cover { border-bottom:3px solid var(--teal-700); padding-bottom:28px; margin-bottom:34px; }
+  .kicker { font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal-700); font-weight:500; }
+  h1 { font-family:var(--sans); font-weight:600; font-size:32px; line-height:1.13; letter-spacing:-.02em; margin:14px 0 12px; }
+  .subtitle { font-family:var(--serif); font-size:21px; font-style:italic; color:var(--ink-700); line-height:1.3; }
+  .meta-line { display:flex; flex-wrap:wrap; gap:8px 22px; margin-top:22px; font-family:var(--mono); font-size:11.5px; color:var(--ink-500); }
+  .meta-line b { color:var(--ink-900); font-weight:500; }
+
+  h2 { font-size:21px; font-weight:600; letter-spacing:-.01em; margin:38px 0 12px; padding-top:14px; border-top:1px solid var(--hair); }
+  h2 .n { font-family:var(--mono); font-size:14px; color:var(--teal-700); margin-right:10px; font-weight:500; }
+  h3 { font-size:16px; font-weight:600; margin:22px 0 8px; }
+  p { margin:0 0 13px; text-wrap:pretty; }
+  a { color:var(--teal-700); }
+  sup.ref { font-family:var(--mono); font-size:10px; font-weight:500; color:var(--teal-700); cursor:pointer; padding:0 1px; }
+  strong { font-weight:600; }
+  ul,ol { margin:0 0 13px; padding-left:22px; }
+  li { margin:5px 0; }
+  code { font-family:var(--mono); font-size:.88em; background:var(--bg); border:1px solid var(--hair); border-radius:4px; padding:1px 5px; }
+
+  .abstract { background:var(--teal-50); border:1px solid var(--teal-100); border-radius:10px; padding:20px 24px; }
+  .abstract .lbl { font-family:var(--mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--teal-700); margin-bottom:8px; }
+  .abstract p { font-size:14px; margin-bottom:0; }
+  .kw { display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; }
+  .kw span { font-size:11.5px; background:var(--bg); border:1px solid var(--border); border-radius:999px; padding:3px 11px; color:var(--ink-700); }
+
+  .callout { border-left:3px solid var(--teal-600); background:var(--bg); padding:12px 18px; margin:16px 0; border-radius:0 8px 8px 0; }
+  .callout.gap { border-left-color:var(--red); }
+  .callout .h { font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--teal-700); margin-bottom:5px; }
+  .callout.gap .h { color:var(--red); }
+  .callout p { font-size:13.5px; margin:0; }
+
+  figure { margin:20px 0; }
+  .pipe { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:center; background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:22px 16px; }
+  .node { font-family:var(--mono); font-size:12px; padding:10px 12px; border-radius:8px; text-align:center; line-height:1.35; }
+  .node.gen { background:var(--teal-50); border:1px solid var(--teal-100); color:var(--teal-700); }
+  .node.cand { background:#fff; border:1px dashed var(--border); color:var(--ink-700); }
+  .node.judge { background:#efe9f7; border:1px solid #d9cdee; color:var(--violet); }
+  .node.out { background:var(--ink-900); color:#fff; }
+  .arrow { font-family:var(--mono); color:var(--ink-400); font-size:16px; }
+  figcaption { font-size:12px; color:var(--ink-500); margin-top:10px; text-align:center; }
+
+  table { width:100%; border-collapse:collapse; margin:16px 0; font-size:12px; }
+  caption { caption-side:top; text-align:left; font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-500); margin-bottom:8px; }
+  th,td { text-align:left; padding:9px 10px; border-bottom:1px solid var(--hair); vertical-align:top; }
+  thead th { background:var(--bg); font-size:10px; font-family:var(--mono); letter-spacing:.05em; text-transform:uppercase; color:var(--ink-500); font-weight:500; border-bottom:1px solid var(--border); }
+  .mono { font-family:var(--mono); }
+  tbody tr:last-child td { border-bottom:0; }
+
+  .refs { font-size:12px; }
+  .refs ol { padding-left:0; list-style:none; counter-reset:ref; }
+  .refs li { display:flex; gap:10px; margin:8px 0; }
+  .refs li::before { counter-increment:ref; content:"["counter(ref)"]"; font-family:var(--mono); font-size:11px; color:var(--teal-700); flex-shrink:0; min-width:28px; }
+  .refs .src { color:var(--ink-500); font-style:italic; }
+
+  footer { margin-top:40px; padding-top:16px; border-top:1px solid var(--hair); font-family:var(--mono); font-size:10.5px; color:var(--ink-400); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+
+  .toolbar { position:fixed; top:18px; right:18px; display:flex; gap:8px; z-index:20; }
+  .toolbar button { font-family:var(--sans); font-size:12.5px; font-weight:500; padding:8px 14px; border:1px solid var(--border); background:#fff; border-radius:8px; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.08); color:var(--ink-900); }
+  .toolbar button:hover { background:var(--teal-50); border-color:var(--teal-600); color:var(--teal-700); }
+
+  @media print {
+    @page { size:A4; margin:18mm 16mm; }
+    html,body { background:#fff; }
+    .page { box-shadow:none; max-width:none; padding:0; }
+    .toolbar { display:none; }
+    h2 { break-after:avoid; } table,figure,.callout,.abstract { break-inside:avoid; }
+    sup.ref { color:#000; }
+  }
+  @media (max-width:680px){ .page{ padding:34px 22px; } h1{ font-size:25px; } .pipe{ flex-direction:column; } }
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="window.print()">Print / PDF</button></div>
+
+<article class="page">
+
+  <header class="cover">
+    <div class="kicker">Systematic Survey · State of the Art</div>
+    <h1>Collaborative Small Language Models as Reliable Code Judges</h1>
+    <p class="subtitle">From LLM-as-a-judge to efficient, sovereign Generator–Judge pipelines for code correctness</p>
+    <div class="meta-line">
+      <span><b>Author</b> · Maryam Khallala</span>
+      <span><b>Field</b> · Software Engineering &amp; LLMs</span>
+      <span><b>Version</b> · 1.0 — June 2026</span>
+      <span><b>Scope</b> · 2023–2026</span>
+    </div>
+  </header>
+
+  <section class="abstract">
+    <div class="lbl">Abstract</div>
+    <p>Large Language Models (LLMs) generate code at near-human proficiency, yet their cost, privacy exposure, and propensity for plausible-but-incorrect output limit industrial adoption. A growing body of work reframes quality assurance as a <em>judging</em> problem: rather than scaling the generator, a separate model verifies candidate solutions. This survey synthesizes the state of the art at the intersection of three threads — (i) <strong>Small Language Models (SLMs)</strong> for code, (ii) the <strong>LLM-as-a-judge</strong> paradigm and its specialization to code correctness, and (iii) <strong>Generator–Judge</strong> reranking/selection pipelines. We organize the literature into a taxonomy, compare benchmarks (HumanEval, MBPP, CoderEval, MultiPL-E) and reliability metrics (pass@k, Cohen's κ, FDR), and analyze the efficiency/sovereignty arguments motivating local deployment. We identify a concrete research gap: the lack of a systematic evaluation of fine-tuned, <em>collaborative</em> decoder-only SLM judges, and outline a research agenda built on hard-negative training via mutation testing and team-based judging.</p>
+    <div class="kw">
+      <span>Small Language Models</span><span>LLM-as-a-judge</span><span>Code generation</span>
+      <span>Generator–Judge</span><span>Reranking</span><span>QLoRA</span><span>Mutation testing</span><span>Green AI</span>
+    </div>
+  </section>
+
+  <h2><span class="n">1</span>Introduction &amp; motivation</h2>
+  <p>Code LLMs such as GPT-4 and the Llama / Code Llama family reach strong performance on basic programming tasks<sup class="ref" data-r="1">[1]</sup><sup class="ref" data-r="2">[2]</sup>, but the software-engineering industry faces a <strong>scaling bottleneck</strong>: hosting a 70B-parameter model requires multi-GPU clusters costing on the order of tens of thousands of dollars, whereas an SLM runs on a single consumer GPU.<sup class="ref" data-r="3">[3]</sup> Two further problems compound the cost issue: LLMs frequently produce code that is <strong>syntactically valid but logically flawed</strong> (a manifestation of hallucination)<sup class="ref" data-r="4">[4]</sup>, and most candidate-selection systems only <em>rank</em> outputs rather than delivering a strict <strong>binary correctness verdict</strong> suitable for automated-testing integration.<sup class="ref" data-r="5">[5]</sup></p>
+  <p>In parallel, open SLMs — Qwen2.5-Coder, DeepSeek-Coder, Gemma, Code Llama — now deliver high specialized performance at a fraction of the parameter count<sup class="ref" data-r="6">[6]</sup><sup class="ref" data-r="7">[7]</sup><sup class="ref" data-r="2">[2]</sup>, making them credible candidates for targeted verification tasks. This survey maps how these threads converge on a single idea: a <strong>specialized SLM judge</strong>, possibly deployed as a <em>team</em>, can approach the reliability of much larger models while remaining local, cost-efficient, and sustainable.<sup class="ref" data-r="8">[8]</sup></p>
+
+  <h2><span class="n">2</span>Scope &amp; methodology</h2>
+  <p>We conducted a semi-structured narrative survey, prioritizing peer-reviewed venues (ICSE, ASE, ICML, EMNLP, NeurIPS) and high-quality preprints from <strong>2023–2026</strong>, with seminal earlier work retained for context. Inclusion criteria: relevance to (a) code generation/evaluation with language models, (b) the judge/evaluator paradigm, or (c) efficiency of small vs. large models. Three guiding research questions structure the review:</p>
+  <ul>
+    <li><strong>RQ1</strong> — How capable are SLMs at code generation relative to LLMs, and under what budgets?</li>
+    <li><strong>RQ2</strong> — Can language models reliably <em>judge</em> code correctness, and how is that reliability measured?</li>
+    <li><strong>RQ3</strong> — Do collaborative / fine-tuned SLM judges close the gap with large models?</li>
+  </ul>
+
+  <h2><span class="n">3</span>Background &amp; the Generator–Judge paradigm</h2>
+  <p>The dominant route to higher-quality code is <em>over-generation + selection</em>: sample <code>K</code> candidates, then choose the best. Selection strategies range from execution-based filtering (unit tests, when available) to learned <strong>rerankers</strong> and, most recently, model-based <strong>judges</strong>. The judge paradigm originates in open-ended NLP evaluation — <em>LLM-as-a-judge</em> with MT-Bench showed strong agreement with human preferences<sup class="ref" data-r="9">[9]</sup> — and a 2025 survey, <em>From Generation to Judgment</em>, consolidates judging input/output formats (pointwise scoring, pairwise comparison, pass/fail classification) and methodologies.<sup class="ref" data-r="10">[10]</sup> A dedicated literature review now frames LLM-as-a-judge specifically for software engineering tasks.<sup class="ref" data-r="11">[11]</sup></p>
+  <figure>
+    <div class="pipe">
+      <span class="node gen">Generator SLM</span>
+      <span class="arrow">→</span>
+      <span class="node cand">{ Candidate₁ … Candidate_K }</span>
+      <span class="arrow">→</span>
+      <span class="node judge">SLM Judge(s)<br/>binary verdict</span>
+      <span class="arrow">→</span>
+      <span class="node out">Best solution</span>
+    </div>
+    <figcaption>Figure 1 — The Generator–Judge pipeline. A lightweight generator proposes K candidates; one or more specialized SLM judges filter them to a single reliable solution.<sup class="ref" data-r="8">[8]</sup></figcaption>
+  </figure>
+
+  <h2><span class="n">4</span>Axis A — Small Language Models for code</h2>
+  <p>Open code SLMs have advanced rapidly: Code Llama<sup class="ref" data-r="2">[2]</sup>, DeepSeek-Coder<sup class="ref" data-r="6">[6]</sup>, Qwen2.5-Coder<sup class="ref" data-r="7">[7]</sup> and Gemma for edge/mobile<sup class="ref" data-r="12">[12]</sup> deliver competitive results at 1–7B scale. Recent empirical studies systematically benchmark <strong>20+ open SLMs (0.4–10B)</strong> on HumanEval, MBPP and efficiency-oriented suites, characterizing the accuracy/latency/cost frontier and confirming that the smallest viable model is often task-dependent.<sup class="ref" data-r="13">[13]</sup> Dedicated SLM surveys catalogue architectures, training, and on-device constraints.<sup class="ref" data-r="14">[14]</sup> A complementary line quantifies the <strong>energy footprint</strong> of small vs. large models for programming, grounding the sustainability argument.<sup class="ref" data-r="15">[15]</sup></p>
+
+  <h2><span class="n">5</span>Axis B — LLM/SLM-as-a-judge for code correctness</h2>
+  <p>Generic preference judging does not transfer directly to code: correctness is objective and often hinges on subtle logic. <strong>CodeJudge</strong> evaluates code generation with LLMs without relying on test execution, eliciting structured correctness assessments.<sup class="ref" data-r="16">[16]</sup> <strong>MCTS-Judge</strong> applies test-time scaling (Monte-Carlo Tree Search) to strengthen LLM judgment of code correctness.<sup class="ref" data-r="17">[17]</sup> Yet studies also reveal <strong>systematic failure modes</strong>: models struggle to verify code against natural-language specifications, over-accepting plausible but wrong solutions.<sup class="ref" data-r="18">[18]</sup> On the small end, <strong>SLMJury</strong> provides one of the first systematic evaluations of whether SLMs can judge as well as large ones, reporting that careful prompting and aggregation narrow — but do not erase — the gap.<sup class="ref" data-r="19">[19]</sup></p>
+  <p>Crucially, the closest work to the thesis — Crupi, Tufano <em>et al.</em>, <em>Improving Code Generation via Small Language Model-as-a-Judge</em> — shows that off-the-shelf SLMs judge code poorly zero-shot, but after targeted fine-tuning their agreement with ground truth (Cohen's κ) rises substantially, matching or exceeding much larger judges and execution-free rerankers.<sup class="ref" data-r="20">[20]</sup></p>
+
+  <h2><span class="n">6</span>Axis C — Reranking, selection &amp; training the judge</h2>
+  <p><strong>Coder-Reviewer</strong> reranking scores candidates by the likelihood the instruction is reconstructed from the code<sup class="ref" data-r="21">[21]</sup>; <strong>RankEF</strong> casts selection as multi-task learning over execution and non-execution signals, but optimizes <em>ranking</em> rather than binary classification reliability (e.g., False Discovery Rate).<sup class="ref" data-r="5">[5]</sup> Turning a generator-grade SLM into a discriminative judge typically combines (i) a <strong>classification head</strong> on the last hidden state, (ii) parameter-efficient fine-tuning via <strong>QLoRA</strong><sup class="ref" data-r="22">[22]</sup>, and (iii) supervision with <strong>hard negatives</strong> — buggy variants produced by semantic-preserving but logic-breaking <strong>mutation testing</strong> (operator, boundary, and control-flow mutations) seeded from correct HumanEval / CoderEval solutions.<sup class="ref" data-r="23">[23]</sup></p>
+
+  <h2><span class="n">7</span>Axis D — Collaborative / ensemble judging</h2>
+  <p>The frontier idea is to replace a single judge with a <strong>team of specialized SLMs</strong> whose verdicts are aggregated, trading a modest compute increase for reliability competitive with 70B-class models while keeping inference local.<sup class="ref" data-r="20">[20]</sup><sup class="ref" data-r="8">[8]</sup> Open questions concern aggregation rules (majority, weighted, senior-review), judge diversity, and guarding against correlated errors and <em>preference leakage</em> when generators and judges share lineage.<sup class="ref" data-r="10">[10]</sup></p>
+
+  <h2><span class="n">8</span>Benchmarks &amp; reliability metrics</h2>
+  <table>
+    <caption>Table 1 — Benchmarks &amp; metrics commonly used for code generation and judging</caption>
+    <thead><tr><th>Resource</th><th>Type</th><th>Role in judge evaluation</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">HumanEval / MBPP</td><td>Function-level tasks</td><td>Seed correct solutions; source of mutated hard negatives</td></tr>
+      <tr><td class="mono">CoderEval</td><td>Pragmatic, repo-level</td><td>Moves beyond toy algorithms toward realistic code<sup class="ref" data-r="24">[24]</sup></td></tr>
+      <tr><td class="mono">MultiPL-E</td><td>Polyglot</td><td>Cross-language generalization of judging<sup class="ref" data-r="25">[25]</sup></td></tr>
+      <tr><td class="mono">pass@k</td><td>Generation metric</td><td>Upper bound the judge tries to realize via selection</td></tr>
+      <tr><td class="mono">Cohen's κ</td><td>Agreement metric</td><td>Judge reliability vs. ground-truth correctness<sup class="ref" data-r="20">[20]</sup></td></tr>
+      <tr><td class="mono">FDR</td><td>Error metric</td><td>Rate of wrong code accepted as correct (critical for CI)</td></tr>
+    </tbody>
+  </table>
+  <div class="callout">
+    <div class="h">Why classification, not ranking</div>
+    <p>For automated-testing integration a system must answer "is this correct?" — a binary verdict with controlled False Discovery Rate — not merely "which candidate is best". Most rerankers optimize the latter, leaving classification reliability under-measured.<sup class="ref" data-r="5">[5]</sup></p>
+  </div>
+
+  <h2><span class="n">9</span>Synthesis: where approaches sit</h2>
+  <table>
+    <caption>Table 2 — Comparative positioning of representative approaches</caption>
+    <thead><tr><th>Approach</th><th>Judge size</th><th>Output</th><th>Execution-free</th><th>Local / sovereign</th></tr></thead>
+    <tbody>
+      <tr><td>Coder-Reviewer<sup class="ref" data-r="21">[21]</sup></td><td>LLM</td><td>Rank</td><td>Yes</td><td>Partial</td></tr>
+      <tr><td>RankEF<sup class="ref" data-r="5">[5]</sup></td><td>Mid (T5)</td><td>Rank</td><td>Mixed</td><td>Partial</td></tr>
+      <tr><td>CodeJudge<sup class="ref" data-r="16">[16]</sup></td><td>LLM</td><td>Score/verdict</td><td>Yes</td><td>No (cloud)</td></tr>
+      <tr><td>MCTS-Judge<sup class="ref" data-r="17">[17]</sup></td><td>LLM + search</td><td>Verdict</td><td>Yes</td><td>No</td></tr>
+      <tr><td>SLMJury<sup class="ref" data-r="19">[19]</sup></td><td>SLM</td><td>Score</td><td>Yes</td><td>Yes</td></tr>
+      <tr><td><strong>SLM-Judge team (thesis)</strong></td><td><strong>SLM ×N</strong></td><td><strong>Binary</strong></td><td><strong>Yes</strong></td><td><strong>Yes</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h2><span class="n">10</span>Research gap &amp; agenda</h2>
+  <div class="callout gap">
+    <div class="h">Identified gap</div>
+    <p>Current literature lacks a <strong>systematic evaluation of modern decoder-only SLMs as autonomous, binary code judges</strong>, trained on hard negatives and operated <strong>collaboratively</strong>, with reliability reported as classification metrics (κ, FDR) on pragmatic benchmarks rather than ranking quality on toy tasks.<sup class="ref" data-r="5">[5]</sup><sup class="ref" data-r="20">[20]</sup></p>
+  </div>
+  <p>This survey motivates a three-objective agenda, consistent with the thesis proposal:</p>
+  <ol>
+    <li><strong>Benchmark</strong> SLM architectures (1B–7B) on binary code classification, reporting κ and FDR on HumanEval and CoderEval.<sup class="ref" data-r="24">[24]</sup></li>
+    <li><strong>Specialized fine-tuning</strong> with mutation-generated hard negatives via QLoRA, to sharpen discrimination of near-invisible logical errors.<sup class="ref" data-r="22">[22]</sup><sup class="ref" data-r="23">[23]</sup></li>
+    <li><strong>Collaborative team</strong> of SLM judges with principled aggregation, targeting reliability competitive with 70B-class models at ≈97% lower hardware cost and a markedly smaller carbon footprint.<sup class="ref" data-r="8">[8]</sup><sup class="ref" data-r="15">[15]</sup></li>
+  </ol>
+
+  <h2><span class="n">11</span>Conclusion</h2>
+  <p>The field is shifting from "scale the generator" to "verify with a specialized judge". SLMs make this shift economically and environmentally attractive, and early evidence shows that fine-tuned — and especially <em>collaborative</em> — SLM judges can rival far larger models on code-correctness decisions. The open problem is rigorous, classification-oriented evaluation of such teams on realistic benchmarks. A thesis combining hard-negative mutation training, QLoRA specialization, and team-based judging directly addresses this gap and aligns with the 2026 priorities of efficient, sovereign, and sustainable AI for software engineering.</p>
+
+  <h2><span class="n">12</span>References</h2>
+  <div class="refs">
+    <ol>
+      <li>OpenAI. GPT-4 Technical Report. <span class="src">arXiv:2303.08774, 2023.</span></li>
+      <li>Rozière B. <em>et al.</em> Code Llama: Open Foundation Models for Code. <span class="src">arXiv:2308.12950, 2023.</span></li>
+      <li>Hassid M. <em>et al.</em> Efficiency of small vs. large language models in programming tasks. <span class="src">Journal of Systems and Software, 2024.</span></li>
+      <li>Ji Z. <em>et al.</em> Survey of Hallucination in Natural Language Generation. <span class="src">ACM Computing Surveys, 2023.</span></li>
+      <li>Sun Z. <em>et al.</em> RankEF: Multi-task Learning for Code Ranking. <span class="src">IEEE/ACM ASE, 2024.</span></li>
+      <li>DeepSeek-AI. DeepSeek-Coder: When the Size Matters. <span class="src">arXiv:2401.14196, 2024.</span></li>
+      <li>Qwen Team. Qwen2.5-Coder Technical Report. <span class="src">Alibaba Group, 2024.</span></li>
+      <li>Crupi G., Tufano R. <em>et al.</em> (collaborative SLM-judge analysis). <span class="src">See [20] — cost/footprint &amp; team-based judging.</span></li>
+      <li>Zheng L. <em>et al.</em> Judging LLM-as-a-Judge with MT-Bench. <span class="src">arXiv:2306.05685, 2023.</span></li>
+      <li>Li D. <em>et al.</em> From Generation to Judgment: Opportunities and Challenges of LLM-as-a-judge. <span class="src">Survey, 2024–2025 (arXiv:2411.16594).</span></li>
+      <li>LLM-as-a-Judge for Software Engineering: A Literature Review &amp; Vision. <span class="src">arXiv:2510.24367, 2025.</span></li>
+      <li>Google DeepMind. Gemma 3: Advancing Open Models for Mobile and Edge Devices. <span class="src">Technical Report, 2025.</span></li>
+      <li>Assessing Small Language Models for Code Generation (empirical study, 20 SLMs, 0.4–10B). <span class="src">arXiv:2507.03160, 2025.</span></li>
+      <li>Subramanian S. <em>et al.</em> / Van Nguyen C. <em>et al.</em> Surveys of Small Language Models. <span class="src">arXiv:2501.05465 ; arXiv:2410.20011, 2024–2025.</span></li>
+      <li>Energy-Aware Code Generation with LLMs: Benchmarking Small vs. Large Models for Sustainable AI Programming. <span class="src">arXiv:2508.08332, 2025.</span></li>
+      <li>Tong W., Zhang T. CodeJudge: Evaluating Code Generation with Large Language Models. <span class="src">EMNLP, arXiv:2410.02184, 2024.</span></li>
+      <li>MCTS-Judge: Test-Time Scaling in LLM-as-a-Judge for Code Correctness. <span class="src">arXiv:2502.12468, 2025.</span></li>
+      <li>On the systematic failures of LLMs in verifying code against natural-language specifications. <span class="src">arXiv:2508.12358, 2025.</span></li>
+      <li>SLMJury / Can Small Language Models Judge as Well as Large Ones? <span class="src">arXiv (2025–2026).</span></li>
+      <li>Crupi G., Tufano R. <em>et al.</em> Improving Code Generation via Small Language Model-as-a-Judge. <span class="src">arXiv:2602.11911, 2026 — core reference.</span></li>
+      <li>Zhang T. <em>et al.</em> Coder-Reviewer Reranking for Code Generation. <span class="src">ICML, 2023.</span></li>
+      <li>Dettmers T. <em>et al.</em> QLoRA: Efficient Finetuning of Quantized LLMs. <span class="src">NeurIPS, 2024.</span></li>
+      <li>Crupi G. <em>et al.</em> Hard-negative supervision via mutation testing (methodology). <span class="src">See [20].</span></li>
+      <li>Yu H., Shen B. <em>et al.</em> CoderEval: A Benchmark of Pragmatic Code Generation. <span class="src">ICSE, 2024.</span></li>
+      <li>Cassano F. <em>et al.</em> MultiPL-E: A Scalable, Polyglot Benchmark for Code Generation. <span class="src">IEEE TSE, 2023.</span></li>
+    </ol>
+  </div>
+
+  <footer>
+    <span>Survey v1.0 — June 2026 · working document</span>
+    <span>Prepared for article preparation · M. Khallala</span>
+  </footer>
+</article>
+
+<script>
+  document.querySelectorAll('sup.ref').forEach(function(s){
+    s.addEventListener('click', function(){
+      var n = parseInt(s.getAttribute('data-r'),10);
+      var li = document.querySelectorAll('.refs li')[n-1];
+      if(!li) return;
+      li.scrollIntoView({behavior:'smooth', block:'center'});
+      li.style.transition='background 1.2s'; li.style.background='var(--teal-50)';
+      setTimeout(function(){ li.style.background='transparent'; }, 1400);
+    });
+  });
+</script>
+</body>
+</html>

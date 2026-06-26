@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <radialGradient id="hot" cx="0.55" cy="0.5" r="0.35">
+      <stop offset="0%" stop-color="#FF2E6E" stop-opacity="0.85"></stop>
+      <stop offset="40%" stop-color="#C9377F" stop-opacity="0.5"></stop>
+      <stop offset="80%" stop-color="#6E4FBF" stop-opacity="0.18"></stop>
+      <stop offset="100%" stop-color="#1FA2A3" stop-opacity="0"></stop>
+    </radialGradient>
+    <radialGradient id="hot2" cx="0.7" cy="0.7" r="0.18">
+      <stop offset="0%" stop-color="#FFD25A" stop-opacity="0.7"></stop>
+      <stop offset="100%" stop-color="#C9377F" stop-opacity="0"></stop>
+    </radialGradient>
+    <clipPath id="circle2">
+      <circle cx="200" cy="200" r="195"></circle>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#circle2)">
+    <rect width="400" height="400" fill="url(#hot)"></rect>
+    <ellipse cx="280" cy="280" rx="60" ry="40" fill="url(#hot2)"></ellipse>
+  </g>
+</svg>

@@ -1,0 +1,48 @@
+# Octopus — orchestration COMPLÈTE (front + API + base) en une commande.
+#
+#   docker compose up --build
+#
+#   ➜  Front (accueil)  : http://localhost:8080
+#   ➜  API (FastAPI)    : http://localhost:8000        (docs : /docs)
+#   ➜  Postgres         : localhost:5432
+#
+# Le front est servi par nginx, qui fait aussi proxy de /api vers l'API
+# (même origine → pas de souci CORS). Pour activer le mode backend côté
+# navigateur, ouvre la console sur http://localhost:8080 et tape une fois :
+#     localStorage.setItem('octopus.api_url', '/api'); location.reload();
+# (Sans ça, le front tourne en mode base locale — totalement autonome.)
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: octopus
+      POSTGRES_PASSWORD: octopus
+      POSTGRES_DB: octopus
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U octopus"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg2://octopus:octopus@db:5432/octopus
+    ports: ["8000:8000"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    image: nginx:alpine
+    ports: ["8080:80"]
+    volumes:
+      - ./:/usr/share/nginx/html:ro
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
