@@ -1,0 +1,38 @@
+<!doctype html>
+<!-- @dsCard group="Spacing" name="Spacing scale" subtitle="4px base grid · 10 steps" viewport="700x320" -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Spacing</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 24px; background: var(--rs-bg); }
+  .head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 16px; }
+  .scale { display:flex; flex-direction: column; gap: 8px; }
+  .row { display:flex; align-items:center; gap: 14px; }
+  .row .name { width: 80px; font-family: var(--rs-font-mono); font-size: 12px; color: var(--rs-ink-700); }
+  .row .px { width: 60px; font-family: var(--rs-font-mono); font-size: 12px; color: var(--rs-fg-muted); }
+  .bar { height: 14px; background: var(--rs-teal-600); border-radius: 2px; }
+</style>
+</head>
+<body class="rs-root">
+  <div class="head">
+    <div>
+      <div class="rs-eyebrow">SPACING · 4PX BASE GRID</div>
+      <div style="font-size:13px;color:var(--rs-fg-muted);margin-top:4px">Every padding/gap value is a token. Never raw px.</div>
+    </div>
+  </div>
+  <div class="scale">
+    <div class="row"><span class="name">space-1</span><span class="px">4 px</span><span class="bar" style="width:4px"></span></div>
+    <div class="row"><span class="name">space-2</span><span class="px">8 px</span><span class="bar" style="width:8px"></span></div>
+    <div class="row"><span class="name">space-3</span><span class="px">12 px</span><span class="bar" style="width:12px"></span></div>
+    <div class="row"><span class="name">space-4</span><span class="px">16 px</span><span class="bar" style="width:16px"></span></div>
+    <div class="row"><span class="name">space-5</span><span class="px">20 px</span><span class="bar" style="width:20px"></span></div>
+    <div class="row"><span class="name">space-6</span><span class="px">24 px</span><span class="bar" style="width:24px"></span></div>
+    <div class="row"><span class="name">space-7</span><span class="px">32 px</span><span class="bar" style="width:32px"></span></div>
+    <div class="row"><span class="name">space-8</span><span class="px">40 px</span><span class="bar" style="width:40px"></span></div>
+    <div class="row"><span class="name">space-9</span><span class="px">56 px</span><span class="bar" style="width:56px"></span></div>
+    <div class="row"><span class="name">space-10</span><span class="px">72 px</span><span class="bar" style="width:72px"></span></div>
+  </div>
+</body>
+</html>

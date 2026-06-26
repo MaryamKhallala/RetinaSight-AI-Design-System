@@ -1,0 +1,38 @@
+<!doctype html>
+<!-- @dsCard group="Colors" name="Colors — brand teal" subtitle="OKLCH ramp, primary at 600" viewport="700x200" -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Colors · Brand teal</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 24px; background: var(--rs-bg); }
+  .ramp { display:grid; grid-template-columns: repeat(10, 1fr); gap: 6px; }
+  .swatch { height: 80px; border-radius: var(--rs-radius-md); border: 1px solid rgba(0,0,0,0.06); position: relative; overflow: hidden; }
+  .swatch span { position: absolute; left: 8px; bottom: 6px; font-family: var(--rs-font-mono); font-size: 10px; letter-spacing: 0.06em; color: var(--rs-canvas-fg); }
+  .swatch.light span { color: var(--rs-ink-700); }
+  .head { display:flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
+</style>
+</head>
+<body class="rs-root">
+  <div class="head">
+    <div>
+      <div class="rs-eyebrow">BRAND · OCULAR TEAL</div>
+      <div style="font-size:13px;color:var(--rs-fg-muted);margin-top:4px">OKLCH ramp · primary action at 600</div>
+    </div>
+    <div class="rs-meta">--rs-teal-50 → 900</div>
+  </div>
+  <div class="ramp">
+    <div class="swatch light" style="background:var(--rs-teal-50)"><span>50</span></div>
+    <div class="swatch light" style="background:var(--rs-teal-100)"><span>100</span></div>
+    <div class="swatch light" style="background:var(--rs-teal-200)"><span>200</span></div>
+    <div class="swatch light" style="background:var(--rs-teal-300)"><span>300</span></div>
+    <div class="swatch" style="background:var(--rs-teal-400)"><span>400</span></div>
+    <div class="swatch" style="background:var(--rs-teal-500)"><span>500</span></div>
+    <div class="swatch" style="background:var(--rs-teal-600); outline: 2px solid var(--rs-teal-700); outline-offset: -1px"><span>600 ●</span></div>
+    <div class="swatch" style="background:var(--rs-teal-700)"><span>700</span></div>
+    <div class="swatch" style="background:var(--rs-teal-800)"><span>800</span></div>
+    <div class="swatch" style="background:var(--rs-teal-900)"><span>900</span></div>
+  </div>
+</body>
+</html>

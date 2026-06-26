@@ -1,0 +1,44 @@
+<!doctype html>
+<!-- @dsCard group="Type" name="Type — eyebrow & meta" subtitle="Section markers, rules, inline values" viewport="700x240" -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Type · Eyebrow &amp; meta</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 28px; background: var(--rs-bg); display: flex; flex-direction: column; gap: 22px; }
+  .group { display:flex; align-items: center; gap: 16px; }
+  .label { width: 130px; flex-shrink:0; }
+  .divider-row { display:flex; align-items:center; gap: 10px; }
+  .rule { flex: 1; height: 1px; background: var(--rs-border); }
+</style>
+</head>
+<body class="rs-root">
+
+  <div class="group">
+    <div class="label rs-meta">Eyebrow</div>
+    <span class="rs-eyebrow">CLINICAL DIAGNOSIS</span>
+    <span class="rs-eyebrow" style="color:var(--rs-grade-3)">SEVERE · ACTION REQUIRED</span>
+  </div>
+
+  <div class="group">
+    <div class="label rs-meta">Section rule</div>
+    <div class="divider-row" style="flex:1">
+      <span class="rs-eyebrow">AI ANALYSIS</span>
+      <div class="rule"></div>
+      <span class="rs-meta">04:32:18 UTC</span>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="label rs-meta">Meta line</div>
+    <span class="rs-meta">Case #2384 · Right eye (OD) · Acquired 2026-05-04 · Topcon NW400</span>
+  </div>
+
+  <div class="group">
+    <div class="label rs-meta">Inline value</div>
+    <span style="font-size:15px">Confidence&nbsp;<code class="rs-mono" style="font-weight:500;color:var(--rs-ink-900)">92.4%</code> · A:V ratio <code class="rs-mono" style="font-weight:500;color:var(--rs-ink-900)">1.42</code> · 3 lesions</span>
+  </div>
+
+</body>
+</html>

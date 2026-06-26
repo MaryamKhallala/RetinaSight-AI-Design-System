@@ -1,0 +1,41 @@
+<!doctype html>
+<!-- @dsCard group="Colors" name="Colors — image canvas" subtitle="Dark-room family for fundus viewers" viewport="700x260" -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Colors · Image canvas</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 24px; background: var(--rs-bg); }
+  .row { display:grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 14px; }
+  .swatch { height: 80px; border-radius: var(--rs-radius-md); position: relative; overflow:hidden; }
+  .swatch span { position:absolute; left: 8px; bottom: 6px; font-family: var(--rs-font-mono); font-size: 10px; letter-spacing: 0.06em; color: var(--rs-canvas-fg); }
+  .light { color: var(--rs-canvas-900) !important; }
+  .head { display:flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
+  .demo { background: var(--rs-canvas-900); border-radius: var(--rs-radius-md); padding: 18px; color: var(--rs-canvas-fg); display:flex; gap: 14px; align-items:center; }
+  .demo .pill { background: rgba(255,255,255,0.08); padding: 4px 10px; border-radius: var(--rs-radius-pill); font-family: var(--rs-font-mono); font-size: 11px; letter-spacing:0.08em; }
+</style>
+</head>
+<body class="rs-root">
+  <div class="head">
+    <div>
+      <div class="rs-eyebrow">IMAGE CANVAS · DARK SURFACE</div>
+      <div style="font-size:13px;color:var(--rs-fg-muted);margin-top:4px">For fundus / DICOM viewer rooms only — never general UI</div>
+    </div>
+    <div class="rs-meta">--rs-canvas-*</div>
+  </div>
+  <div class="row">
+    <div class="swatch" style="background:var(--rs-canvas-900)"><span>900 · bg</span></div>
+    <div class="swatch" style="background:var(--rs-canvas-800)"><span>800 · raised</span></div>
+    <div class="swatch" style="background:var(--rs-canvas-700)"><span>700</span></div>
+    <div class="swatch" style="background:var(--rs-canvas-600)"><span>600 · border</span></div>
+    <div class="swatch" style="background:var(--rs-canvas-500)"><span>500</span></div>
+    <div class="swatch" style="background:var(--rs-canvas-fg)"><span class="light">fg</span></div>
+  </div>
+  <div class="demo">
+    <span class="pill">OD · RIGHT EYE</span>
+    <span style="font-family:var(--rs-font-mono);font-size:12px;color:var(--rs-canvas-fg-mute)">2026-05-04 · Topcon NW400</span>
+    <span style="margin-left:auto;font-family:var(--rs-font-mono);font-size:12px">512×512 · 4.7s</span>
+  </div>
+</body>
+</html>

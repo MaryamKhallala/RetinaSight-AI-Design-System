@@ -1,0 +1,29 @@
+<!doctype html>
+<!-- @dsCard group="Type" name="Type — data & mono" subtitle="Plex Mono · tabular figures, IDs" viewport="700x220" -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Type · Mono &amp; data</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 28px; background: var(--rs-bg); }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--rs-hairline); }
+  th { font-family: var(--rs-font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--rs-fg-muted); }
+  td { font-family: var(--rs-font-mono); font-size: 14px; font-feature-settings: "tnum","zero"; color: var(--rs-ink-900); }
+  td.metric { color: var(--rs-fg); }
+  .grade { display:inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+</style>
+</head>
+<body class="rs-root">
+  <div class="rs-eyebrow" style="margin-bottom:10px">DATA · IBM PLEX MONO · TABULAR FIGURES</div>
+  <table>
+    <thead><tr><th>Case</th><th>Grade</th><th>AUROC</th><th>A:V ratio</th><th>Latency</th></tr></thead>
+    <tbody>
+      <tr><td>RS-02384</td><td><span class="grade" style="background:var(--rs-grade-2)"></span>Moderate</td><td class="metric">0.93</td><td class="metric">1.42</td><td class="metric">4.7s</td></tr>
+      <tr><td>RS-02385</td><td><span class="grade" style="background:var(--rs-grade-0)"></span>No DR</td><td class="metric">0.97</td><td class="metric">1.68</td><td class="metric">3.9s</td></tr>
+      <tr><td>RS-02386</td><td><span class="grade" style="background:var(--rs-grade-3)"></span>Severe</td><td class="metric">0.91</td><td class="metric">1.21</td><td class="metric">4.2s</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- @dsCard group="Brand" name="Fundus imagery" subtitle="Raw / Grad-CAM / vessel-mask triptych" viewport="700x360" -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Brand · Fundus imagery</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 0; background: var(--rs-canvas-900); height: 360px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; padding: 18px; height: 100%; box-sizing: border-box; }
+  .tile { position: relative; border-radius: var(--rs-radius-md); overflow: hidden; background: #000; display:flex; align-items:center; justify-content:center; }
+  .tile img { width: 100%; height: 100%; object-fit: contain; }
+  .tile .ovl { position: absolute; inset: 0; mix-blend-mode: screen; opacity: 0.7; }
+  .tile .label { position: absolute; left: 10px; top: 10px; font-family: var(--rs-font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rs-canvas-fg); background: rgba(0,0,0,0.55); padding: 4px 10px; border-radius: var(--rs-radius-pill); }
+  .tile .meta { position: absolute; right: 10px; bottom: 10px; font-family: var(--rs-font-mono); font-size: 10px; color: var(--rs-canvas-fg-mute); }
+</style>
+</head>
+<body class="rs-root">
+  <div class="row">
+    <div class="tile">
+      <img src="../assets/fundus-sample-1.svg" alt="fundus"/>
+      <span class="label">Raw fundus</span>
+      <span class="meta">512×512 · OD</span>
+    </div>
+    <div class="tile">
+      <img src="../assets/fundus-sample-1.svg" alt="fundus"/>
+      <img class="ovl" src="../assets/fundus-sample-heatmap.svg" alt=""/>
+      <span class="label" style="color:#FFD3E3">+ Grad-CAM</span>
+      <span class="meta">Lesion heatmap</span>
+    </div>
+    <div class="tile">
+      <img src="../assets/fundus-sample-1.svg" alt="fundus" style="opacity:0.35"/>
+      <img class="ovl" src="../assets/vessel-mask.svg" alt="" style="mix-blend-mode: normal; opacity: 0.95"/>
+      <span class="label" style="color:#A6F0F1">+ Vessel mask</span>
+      <span class="meta">A:V 1.42 · Dice 0.87</span>
+    </div>
+  </div>
+</body>
+</html>

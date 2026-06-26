@@ -1,0 +1,49 @@
+<!doctype html>
+<!-- @dsCard group="Components" name="Severity pills" subtitle="Soft / solid / chip" viewport="700x240" -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Components · Severity pills</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 24px; background: var(--rs-bg); }
+  .head { display:flex; justify-content:space-between; align-items: baseline; margin-bottom: 18px; }
+  .row { display:flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .row + .row { margin-top: 14px; }
+  .pill { display:inline-flex; align-items:center; gap: 6px; padding: 4px 10px; border-radius: var(--rs-radius-pill); font-size: 12px; font-weight: 500; line-height: 1; }
+  .pill.solid { color: #FFF; }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .lab { width: 100px; font-family: var(--rs-font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rs-fg-muted); }
+  .grade-chip { display:inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: var(--rs-radius-md); font-size: 13px; font-weight: 500; border: 1px solid; }
+</style>
+</head>
+<body class="rs-root">
+  <div class="head">
+    <div>
+      <div class="rs-eyebrow">SEVERITY · PILLS &amp; CHIPS</div>
+      <div style="font-size:13px;color:var(--rs-fg-muted);margin-top:4px">Soft (default) for inline grading, solid only for emphasis on dark canvas.</div>
+    </div>
+  </div>
+  <div class="row">
+    <span class="lab">Soft</span>
+    <span class="pill" style="background:var(--rs-grade-0-bg); color:var(--rs-grade-0)"><span class="dot"></span>No DR</span>
+    <span class="pill" style="background:var(--rs-grade-1-bg); color:var(--rs-grade-1)"><span class="dot"></span>Mild</span>
+    <span class="pill" style="background:var(--rs-grade-2-bg); color:var(--rs-grade-2)"><span class="dot"></span>Moderate</span>
+    <span class="pill" style="background:var(--rs-grade-3-bg); color:var(--rs-grade-3)"><span class="dot"></span>Severe</span>
+    <span class="pill" style="background:var(--rs-grade-4-bg); color:var(--rs-grade-4)"><span class="dot"></span>Proliferative</span>
+  </div>
+  <div class="row">
+    <span class="lab">Solid</span>
+    <span class="pill solid" style="background:var(--rs-grade-0)"><span class="dot" style="background:#FFF"></span>No DR</span>
+    <span class="pill solid" style="background:var(--rs-grade-1)"><span class="dot" style="background:#FFF"></span>Mild</span>
+    <span class="pill solid" style="background:var(--rs-grade-2)"><span class="dot" style="background:#FFF"></span>Moderate</span>
+    <span class="pill solid" style="background:var(--rs-grade-3)"><span class="dot" style="background:#FFF"></span>Severe</span>
+    <span class="pill solid" style="background:var(--rs-grade-4)"><span class="dot" style="background:#FFF"></span>Proliferative</span>
+  </div>
+  <div class="row">
+    <span class="lab">Chip</span>
+    <span class="grade-chip" style="background:var(--rs-grade-2-bg); color:var(--rs-grade-2); border-color:var(--rs-grade-2)"><span style="font-family:var(--rs-font-mono); font-size:11px; opacity:0.8">G2</span>Moderate · 92.4%</span>
+    <span class="grade-chip" style="background:var(--rs-grade-3-bg); color:var(--rs-grade-3); border-color:var(--rs-grade-3)"><span style="font-family:var(--rs-font-mono); font-size:11px; opacity:0.8">G3</span>Severe · 88.1%</span>
+  </div>
+</body>
+</html>

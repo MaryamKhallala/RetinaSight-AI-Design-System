@@ -1,0 +1,53 @@
+<!doctype html>
+<!-- @dsCard group="Components" name="Buttons" subtitle="Primary / secondary / ghost / destructive" viewport="700x220" -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Components · Buttons</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 24px; background: var(--rs-bg); display:flex; flex-direction:column; gap: 16px; }
+  .row { display:flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .lab { width: 90px; flex-shrink:0; font-family: var(--rs-font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rs-fg-muted); }
+  .btn { font-family: var(--rs-font-sans); font-size: 14px; font-weight: 500; padding: 8px 14px; border-radius: var(--rs-radius-md); cursor: pointer; border: 1px solid transparent; line-height: 1; display:inline-flex; align-items:center; gap: 8px; transition: background var(--rs-dur-fast) var(--rs-ease-out), color var(--rs-dur-fast) var(--rs-ease-out); }
+  .btn-primary { background: var(--rs-teal-600); color: #FFF; }
+  .btn-primary.hover { background: var(--rs-teal-700); }
+  .btn-primary.press { background: var(--rs-teal-800); box-shadow: inset 0 1px 2px rgba(0,0,0,0.2); }
+  .btn-secondary { background: #FFF; color: var(--rs-ink-900); border-color: var(--rs-border); }
+  .btn-secondary.hover { background: var(--rs-ink-100); }
+  .btn-ghost { background: transparent; color: var(--rs-teal-700); }
+  .btn-ghost.hover { background: var(--rs-teal-50); }
+  .btn-danger { background: var(--rs-grade-3); color: #FFF; }
+  .btn-disabled { opacity: 0.4; pointer-events: none; }
+  .btn-sm { font-size: 13px; padding: 6px 10px; }
+  .btn-lg { font-size: 15px; padding: 10px 18px; }
+  .ico { width: 14px; height: 14px; }
+</style>
+</head>
+<body class="rs-root">
+  <div class="row">
+    <span class="lab">Primary</span>
+    <button class="btn btn-primary"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Generate report</button>
+    <button class="btn btn-primary hover">Hover</button>
+    <button class="btn btn-primary press">Press</button>
+    <button class="btn btn-primary btn-disabled">Disabled</button>
+  </div>
+  <div class="row">
+    <span class="lab">Secondary</span>
+    <button class="btn btn-secondary">Cancel</button>
+    <button class="btn btn-secondary hover">Hover</button>
+    <button class="btn btn-secondary btn-disabled">Disabled</button>
+    <span class="lab" style="margin-left:24px">Ghost</span>
+    <button class="btn btn-ghost">View details</button>
+    <button class="btn btn-ghost hover">Hover</button>
+  </div>
+  <div class="row">
+    <span class="lab">Sizes</span>
+    <button class="btn btn-primary btn-sm">Small</button>
+    <button class="btn btn-primary">Default</button>
+    <button class="btn btn-primary btn-lg">Large</button>
+    <span class="lab" style="margin-left:24px">Destructive</span>
+    <button class="btn btn-danger">Quarantine image</button>
+  </div>
+</body>
+</html>

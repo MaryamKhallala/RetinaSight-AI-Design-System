@@ -1,0 +1,62 @@
+<!doctype html>
+<!-- @dsCard group="Colors" name="Colors — severity ramp" subtitle="ETDRS / ICDR DR grade · fg + bg pairs" viewport="700x240" -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Colors · Severity ramp</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 24px; background: var(--rs-bg); }
+  .head { display:flex; justify-content:space-between; align-items: baseline; margin-bottom: 16px; }
+  .grid { display:grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .cell { border: 1px solid var(--rs-hairline); border-radius: var(--rs-radius-md); padding: 12px; display:flex; flex-direction: column; gap: 8px; }
+  .top { display:flex; align-items: center; gap: 8px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .label { font-size: 13px; font-weight: 500; }
+  .grade-num { font-family: var(--rs-font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--rs-fg-muted); }
+  .pair { display:flex; gap: 4px; height: 28px; }
+  .fg, .bg { flex: 1; border-radius: var(--rs-radius-sm); }
+  .pair-meta { display:flex; justify-content: space-between; font-family: var(--rs-font-mono); font-size: 10px; color: var(--rs-fg-muted); }
+</style>
+</head>
+<body class="rs-root">
+  <div class="head">
+    <div>
+      <div class="rs-eyebrow">SEVERITY · ETDRS / ICDR DR GRADE</div>
+      <div style="font-size:13px;color:var(--rs-fg-muted);margin-top:4px">Foreground + tinted background for every grade. Never use raw red without its tint.</div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="cell">
+      <div class="top"><span class="dot" style="background:var(--rs-grade-0)"></span><span class="label">No DR</span></div>
+      <div class="grade-num">GRADE 0</div>
+      <div class="pair"><div class="fg" style="background:var(--rs-grade-0)"></div><div class="bg" style="background:var(--rs-grade-0-bg)"></div></div>
+      <div class="pair-meta"><span>fg</span><span>bg</span></div>
+    </div>
+    <div class="cell">
+      <div class="top"><span class="dot" style="background:var(--rs-grade-1)"></span><span class="label">Mild</span></div>
+      <div class="grade-num">GRADE 1</div>
+      <div class="pair"><div class="fg" style="background:var(--rs-grade-1)"></div><div class="bg" style="background:var(--rs-grade-1-bg)"></div></div>
+      <div class="pair-meta"><span>fg</span><span>bg</span></div>
+    </div>
+    <div class="cell">
+      <div class="top"><span class="dot" style="background:var(--rs-grade-2)"></span><span class="label">Moderate</span></div>
+      <div class="grade-num">GRADE 2</div>
+      <div class="pair"><div class="fg" style="background:var(--rs-grade-2)"></div><div class="bg" style="background:var(--rs-grade-2-bg)"></div></div>
+      <div class="pair-meta"><span>fg</span><span>bg</span></div>
+    </div>
+    <div class="cell">
+      <div class="top"><span class="dot" style="background:var(--rs-grade-3)"></span><span class="label">Severe</span></div>
+      <div class="grade-num">GRADE 3</div>
+      <div class="pair"><div class="fg" style="background:var(--rs-grade-3)"></div><div class="bg" style="background:var(--rs-grade-3-bg)"></div></div>
+      <div class="pair-meta"><span>fg</span><span>bg</span></div>
+    </div>
+    <div class="cell">
+      <div class="top"><span class="dot" style="background:var(--rs-grade-4)"></span><span class="label">Proliferative</span></div>
+      <div class="grade-num">GRADE 4</div>
+      <div class="pair"><div class="fg" style="background:var(--rs-grade-4)"></div><div class="bg" style="background:var(--rs-grade-4-bg)"></div></div>
+      <div class="pair-meta"><span>fg</span><span>bg</span></div>
+    </div>
+  </div>
+</body>
+</html>

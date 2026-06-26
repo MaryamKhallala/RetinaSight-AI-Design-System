@@ -1,0 +1,56 @@
+<!doctype html>
+<!-- @dsCard group="Brand" name="Brand logo" subtitle="Mark + wordmark on light & dark" viewport="700x220" -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Brand · Logo</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 0; background: var(--rs-bg); }
+  .frame { display: flex; align-items: stretch; min-height: 220px; }
+  .left  { flex: 1.1; padding: 32px; display: flex; flex-direction: column; gap: 18px; justify-content: center; border-right: 1px solid var(--rs-hairline); }
+  .right { flex: 1; padding: 32px; display: flex; flex-direction: column; gap: 14px; align-items: center; justify-content: center; background: var(--rs-canvas-900); color: var(--rs-canvas-fg); }
+  .mark { width: 80px; height: 80px; color: var(--rs-brand-ink); }
+  .wordlock { display: flex; align-items: center; gap: 14px; }
+  .wordlock .name { font-family: var(--rs-font-sans); font-size: 28px; font-weight: 600; letter-spacing: -0.02em; color: var(--rs-brand-ink); }
+  .wordlock .tag  { font-family: var(--rs-font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--rs-fg-muted); margin-top: 4px; }
+  .col { display:flex; flex-direction: column; line-height: 1; }
+  .right .mark { color: #BFE6E5; }
+  .right .name { color: #E8ECEF; font-family: var(--rs-font-sans); font-size: 18px; font-weight: 500; letter-spacing: 0.04em; }
+  .right .tag { font-family: var(--rs-font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--rs-canvas-fg-mute); margin-top: 6px; }
+</style>
+</head>
+<body class="rs-root">
+<div class="frame">
+  <div class="left">
+    <div class="wordlock">
+      <svg viewBox="0 0 64 64" class="mark" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="2"/>
+        <circle cx="32" cy="32" r="20" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <circle cx="32" cy="32" r="12" stroke="currentColor" stroke-width="1.25" opacity="0.35"/>
+        <path d="M32 4 C 18 18, 18 46, 32 60" stroke="currentColor" stroke-width="1.25" opacity="0.55" stroke-linecap="round"/>
+        <path d="M32 4 C 46 18, 46 46, 32 60" stroke="currentColor" stroke-width="1.25" opacity="0.55" stroke-linecap="round"/>
+        <circle cx="32" cy="32" r="3.5" fill="currentColor"/>
+      </svg>
+      <div class="col">
+        <span class="name">RetinaSight</span>
+        <span class="tag">CLINICAL · AI</span>
+      </div>
+    </div>
+    <div class="rs-meta" style="font-size:12px">Light surface · primary lockup</div>
+  </div>
+  <div class="right">
+    <svg viewBox="0 0 64 64" class="mark" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="2"/>
+      <circle cx="32" cy="32" r="20" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+      <circle cx="32" cy="32" r="12" stroke="currentColor" stroke-width="1.25" opacity="0.35"/>
+      <circle cx="32" cy="32" r="3.5" fill="currentColor"/>
+    </svg>
+    <div class="col" style="text-align:center">
+      <span class="name">RETINASIGHT</span>
+      <span class="tag">DARK CANVAS</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>
