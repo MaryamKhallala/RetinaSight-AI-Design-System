@@ -10,3 +10,7 @@ pydantic-settings==2.5.2
 # PostgreSQL (production). Optionnel en local (SQLite par défaut).
 psycopg2-binary==2.9.9
 python-multipart==0.0.12
+# --- IA réelle (optionnel) : décommenter pour brancher un modèle ONNX ---
+# onnxruntime==1.19.2
+# numpy==2.1.1
+# pillow==10.4.0

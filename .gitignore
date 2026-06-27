@@ -1,20 +1,21 @@
-# ---- Python / backend ----
+# Octopus — fichiers et dossiers à ne pas committer
+
+# Backend — environnement Python
 backend/.venv/
 backend/__pycache__/
 backend/app/__pycache__/
 **/__pycache__/
-*.py[cod]
+*.pyc
+
+# Base de données locale (SQLite) + images téléversées
 backend/octopus.db
-*.sqlite3
+backend/storage/
+storage/
+
+# Secrets / config locale
+backend/.env
 .env
 
-# ---- OS / editor ----
+# OS
 .DS_Store
 Thumbs.db
-.vscode/
-.idea/
-
-# ---- build / misc ----
-node_modules/
-dist/
-*.log

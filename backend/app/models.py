@@ -21,6 +21,7 @@ class Case(Base):
     lesion_breakdown: Mapped[dict] = mapped_column(JSON, default=dict)
     status: Mapped[str] = mapped_column(String, default="pending")
     note: Mapped[str] = mapped_column(Text, default="")
+    image_ref: Mapped[str] = mapped_column(String, default="")
 
 
 class Report(Base):
@@ -42,6 +43,7 @@ class User(Base):
     status: Mapped[str] = mapped_column(String, default="active")
     last: Mapped[str] = mapped_column(String, default="—")
     cases: Mapped[str] = mapped_column(String, default="0")
+    password_hash: Mapped[str] = mapped_column(String, default="")
 
 
 class Dataset(Base):

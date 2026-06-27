@@ -60,3 +60,17 @@ class AttemptIn(BaseModel):
     grade: Optional[int] = None
     gradeOk: bool = False
     findingScore: int = 0
+
+
+class LoginIn(BaseModel):
+    email: str
+    password: str
+    role: Optional[str] = None   # profil choisi à la connexion (obligatoire côté UI)
+
+
+class RegisterIn(BaseModel):
+    email: str
+    password: str
+    name: Optional[str] = None
+    role: str = "student"
+    dept: Optional[str] = None

@@ -51,25 +51,50 @@ function Logo({ size=40 }) {
 }
 
 function App() {
+  const [mode, setMode] = useState('login');       // 'login' | 'register'
   const [role, setRole] = useState(null);          // profil OBLIGATOIRE
   const [email, setEmail] = useState('');
   const [pwd, setPwd] = useState('');
+  const [name, setName] = useState('');
   const [touched, setTouched] = useState(false);
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
   const lang = (window.octopusI18n && window.octopusI18n.getLang()) || 'fr';
 
   const chosen = PROFILES.find(p => p.key === role);
-  const valid = !!role && email.trim().length > 3 && pwd.length > 0;
+  const valid = !!role && email.trim().length > 3 && pwd.length > 0 && (mode === 'login' || pwd.length >= 6);
 
-  const fillDemo = (p) => { setRole(p.key); setEmail(p.demoEmail); setPwd('demo'); };
+  const go = (session) => { window.location.href = DEST[session.role] || DEST[role] || DEST.doctor; };
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    setTouched(true);
-    if (!valid) return;
-    window.OctopusDB.login({ email, role, name: chosen ? chosen.demoName : undefined });
-    window.location.href = DEST[role];
+    setTouched(true); setError('');
+    if (!valid || busy) return;
+    setBusy(true);
+    try {
+      if (mode === 'register') {
+        const res = await window.OctopusDB.register({ email, password: pwd, role, name });
+        if (res.ok) return go(res.session);
+        setError(res.error || L('Inscription impossible.', 'Could not register.'));
+      } else {
+        const res = await window.OctopusDB.login({ email, password: pwd, role });
+        if (res.ok) return go(res.session);
+        if (res.error === 'NO_ACCOUNT') {
+          setMode('register');
+          setError(L('Aucun compte avec cet e-mail. Créez-en un ci-dessous.',
+                     'No account with this email. Create one below.'));
+        } else {
+          setError(res.error || L('E-mail ou mot de passe incorrect.', 'Wrong email or password.'));
+        }
+      }
+    } catch (err) {
+      setError(L('Erreur réseau. Réessayez.', 'Network error. Try again.'));
+    } finally {
+      setBusy(false);
+    }
   };
 
+  const switchMode = (m) => { setMode(m); setError(''); setTouched(false); };
   const toggleLang = () => window.octopusI18n.setLang(lang === 'fr' ? 'en' : 'fr');
 
   return (
@@ -107,9 +132,14 @@ function App() {
       {/* ---- right: auth ---- */}
       <main className="land-auth">
         <form className="auth-card" onSubmit={submit}>
+          <div className="auth-tabs">
+            <button type="button" className={`auth-tab ${mode==='login'?'on':''}`} onClick={() => switchMode('login')}>{L('Connexion','Sign in')}</button>
+            <button type="button" className={`auth-tab ${mode==='register'?'on':''}`} onClick={() => switchMode('register')}>{L('Créer un compte','Create account')}</button>
+          </div>
           <div className="auth-head">
-            <h2>{L('Connexion', 'Sign in')}</h2>
-            <p>{L('Sélectionnez votre profil pour accéder à votre espace.', 'Select your profile to access your workspace.')}</p>
+            <p>{mode==='register'
+              ? L('Choisissez un profil et créez vos identifiants.', 'Choose a profile and create your credentials.')
+              : L('Sélectionnez votre profil pour accéder à votre espace.', 'Select your profile to access your workspace.')}</p>
           </div>
 
           {/* PROFIL — OBLIGATOIRE */}
@@ -137,36 +167,42 @@ function App() {
             {touched && !role && <div className="auth-err">{L('Veuillez choisir un profil.', 'Please choose a profile.')}</div>}
           </div>
 
+          {mode === 'register' && (
+            <div className="auth-field">
+              <label className="auth-label">{L('Nom complet', 'Full name')}</label>
+              <input className="auth-input" type="text" autoComplete="name"
+                placeholder={L('Dr. Prénom Nom', 'Dr. First Last')}
+                value={name} onChange={e => setName(e.target.value)} />
+            </div>
+          )}
+
           <div className="auth-field">
             <label className="auth-label">{L('E-mail', 'Email')}</label>
             <input className="auth-input" type="email" autoComplete="username"
-              placeholder={chosen ? chosen.demoEmail : 'nom@etablissement.ma'}
+              placeholder="nom@etablissement.ma"
               value={email} onChange={e => setEmail(e.target.value)} />
           </div>
 
           <div className="auth-field">
-            <label className="auth-label">{L('Mot de passe', 'Password')}</label>
-            <input className="auth-input" type="password" autoComplete="current-password"
+            <label className="auth-label">{L('Mot de passe', 'Password')}{mode==='register' && <span className="auth-hint"> · {L('6 caractères min.','6 chars min.')}</span>}</label>
+            <input className="auth-input" type="password" autoComplete={mode==='register'?'new-password':'current-password'}
               placeholder="••••••••" value={pwd} onChange={e => setPwd(e.target.value)} />
           </div>
 
-          <button type="submit" className={`auth-submit ${valid ? '' : 'disabled'}`}>
-            {chosen
-              ? L(`Continuer vers l’espace ${chosen.fr}`, `Continue to ${chosen.en} workspace`)
-              : L('Choisissez un profil pour continuer', 'Choose a profile to continue')}
+          {error && <div className="auth-err auth-err-box">{error}</div>}
+
+          <button type="submit" className={`auth-submit ${valid && !busy ? '' : 'disabled'}`}>
+            {busy ? L('Patientez…','Please wait…')
+              : mode==='register'
+                ? L('Créer le compte','Create account')
+                : (chosen ? L(`Se connecter — ${chosen.fr}`, `Sign in — ${chosen.en}`) : L('Se connecter','Sign in'))}
             <span className="arr">→</span>
           </button>
 
-          <div className="auth-demo">
-            <span>{L('Accès démo rapide :', 'Quick demo access:')}</span>
-            {PROFILES.map(p => (
-              <button type="button" key={p.key} className="demo-chip" onClick={() => fillDemo(p)}>{L(p.fr, p.en)}</button>
-            ))}
-          </div>
-
           <div className="auth-foot">
-            {L('Démo — aucun mot de passe vérifié. En production : SSO Okta + 2FA.',
-               'Demo — no password is checked. Production: Okta SSO + 2FA.')}
+            {mode==='login'
+              ? <span>{L('Pas encore de compte ? ','No account yet? ')}<a onClick={() => switchMode('register')}>{L('Créer un compte','Create one')}</a></span>
+              : <span>{L('Déjà un compte ? ','Already have an account? ')}<a onClick={() => switchMode('login')}>{L('Se connecter','Sign in')}</a></span>}
           </div>
         </form>
       </main>
@@ -227,8 +263,15 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 /* auth */
 .land-auth { display:flex; align-items:center; justify-content:center; padding:32px; background:var(--rs-bg); }
 .auth-card { width:100%; max-width:430px; display:flex; flex-direction:column; gap:18px; }
+.auth-tabs { display:flex; gap:4px; background:var(--rs-bg-sunken); padding:4px; border-radius:var(--rs-radius-md); }
+.auth-tab { flex:1; padding:9px; border:0; background:transparent; border-radius:var(--rs-radius-sm); font-family:inherit; font-size:13.5px; font-weight:500; color:var(--rs-fg-muted); cursor:pointer; }
+.auth-tab.on { background:var(--rs-bg-raised); color:var(--rs-ink-900); box-shadow:0 1px 2px rgba(0,0,0,.06); }
 .auth-head h2 { font-size:26px; font-weight:600; letter-spacing:-0.02em; margin:0; color:var(--rs-fg); }
-.auth-head p { font-size:14px; color:var(--rs-fg-muted); margin:6px 0 0; }
+.auth-head p { font-size:14px; color:var(--rs-fg-muted); margin:0; }
+.auth-hint { font-weight:400; color:var(--rs-fg-subtle); font-size:11px; }
+.auth-err-box { background:#FCEDEB; border:1px solid #F1C7BD; color:#8C2D24; padding:9px 12px; border-radius:var(--rs-radius-md); font-size:12.5px; }
+.auth-foot a { color:var(--rs-teal-700); font-weight:500; cursor:pointer; text-decoration:none; }
+.auth-foot a:hover { text-decoration:underline; }
 .auth-field { display:flex; flex-direction:column; gap:8px; }
 .auth-label { font-size:12.5px; font-weight:500; color:var(--rs-ink-900); }
 .auth-label .req { color:var(--rs-grade-4); }

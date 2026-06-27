@@ -48,11 +48,17 @@ localStorage.removeItem('octopus.api_url'); location.reload();
 
 | Méthode · URL | Rôle |
 |---|---|
+| `POST /api/auth/login` | Connexion (rôle obligatoire) → token signé + user |
+| `GET  /api/auth/me` | Session courante (`Authorization: Bearer …`) |
+| `POST /api/auth/logout` | Déconnexion (journalisée) |
 | `GET  /api/cases` | Liste des cas |
 | `GET  /api/cases/{id}` | Détail d'un cas |
 | `POST /api/cases` | Créer un cas (+ inférence auto) |
+| `POST /api/cases/upload` | Téléverser une **vraie image** (multipart) — réservé docteur/admin |
+| `GET  /api/cases/{id}/image` | Servir l'image stockée |
 | `POST /api/cases/{id}/infer` | Relancer l'inférence |
-| `POST /api/cases/{id}/report` | Signer / enregistrer le rapport |
+| `POST /api/cases/{id}/report` | Signer / enregistrer le rapport — réservé docteur/admin |
+| `GET  /api/stats` | Indicateurs page « Analyse des résultats » |
 | `GET  /api/reports` | Liste des rapports signés |
 | `GET  /api/users` · `POST /api/users` | Utilisateurs / inviter |
 | `GET  /api/datasets` · `GET /api/models` | Jeux de données / modèles |
@@ -69,6 +75,8 @@ backend/
     database.py    moteur SQLAlchemy (SQLite par défaut, Postgres via env)
     models.py      tables : cases, reports, users, datasets, models, audit, attempts
     schemas.py     validation Pydantic
+    auth.py        hash mot de passe (PBKDF2) + token signé (HMAC) — stdlib
+    storage.py     stockage des images (disque local → MinIO/S3 en prod)
     routes.py      tous les endpoints /api
     inference.py   IA simulée (miroir de lib/db.js) — à remplacer par PyTorch/ONNX
     seed.py        données initiales (identiques au seed front-end)

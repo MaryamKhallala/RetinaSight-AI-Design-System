@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":3,"namespace":"RetinaSightAIDesignSystem_019e04","components":[],"sourceHashes":{"docs_livrable/animations.jsx":"ebe6809a6cbe","docs_livrable/video/scenes.jsx":"0713a9561c23","lib/db.js":"90f6710a6832","lib/i18n.js":"47c8787b08b2","lib/monitoring.js":"526ab6f4d202","web/admin/app.jsx":"ecadb3d38c05","web/doctor/app.jsx":"317e595b16d6","web/doctor/pages.jsx":"28316d996e74","web/settings/app.jsx":"7bf400289e13","web/student/app.jsx":"38819f3b751f"},"inlinedExternals":[],"unexposedExports":[]} */
+/* @ds-bundle: {"format":3,"namespace":"RetinaSightAIDesignSystem_019e04","components":[],"sourceHashes":{"docs_livrable/animations.jsx":"ebe6809a6cbe","docs_livrable/video/scenes.jsx":"0713a9561c23","lib/db.js":"155b603566bb","lib/i18n.js":"47c8787b08b2","lib/monitoring.js":"526ab6f4d202","web/admin/app.jsx":"ecadb3d38c05","web/doctor/app.jsx":"81d0f07eb64a","web/doctor/pages.jsx":"28316d996e74","web/settings/app.jsx":"7bf400289e13","web/student/app.jsx":"38819f3b751f"},"inlinedExternals":[],"unexposedExports":[]} */
 
 (() => {
 
@@ -2238,6 +2238,40 @@ try { (() => {
     infer(seedStr) {
       return infer(seedStr);
     },
+    /* Téléverse une VRAIE image vers le backend (multipart). Hydrate ensuite. */
+    async uploadImage(fileBlob, opts) {
+      opts = opts || {};
+      if (!API) {
+        // pas de backend → fallback local
+        return api.addCase({
+          laterality: opts.laterality,
+          device: opts.device
+        });
+      }
+      const fd = new FormData();
+      fd.append('file', fileBlob, fileBlob.name || 'fundus.png');
+      fd.append('laterality', opts.laterality || 'OD');
+      fd.append('device', opts.device || 'Topcon NW400');
+      if (opts.patient) fd.append('patient', opts.patient);
+      const token = function () {
+        try {
+          return localStorage.getItem('octopus.token');
+        } catch (e) {
+          return null;
+        }
+      }();
+      const r = await fetch(API + '/cases/upload', {
+        method: 'POST',
+        headers: token ? {
+          'Authorization': 'Bearer ' + token
+        } : {},
+        body: fd
+      });
+      if (!r.ok) throw new Error('upload → ' + r.status);
+      const created = await r.json();
+      await hydrate();
+      return created;
+    },
     runInference(id) {
       const c = DB.cases.find(x => x.id === id);
       if (!c) return null;
@@ -2345,22 +2379,35 @@ try { (() => {
       });
       return clone(rec);
     },
-    /* ---------- session / auth (banc d'essai) ----------
-       ⚠️ Auth de DÉMO : aucun mot de passe vérifié côté serveur.
-       En production → POST /api/auth/login (Keycloak / OIDC, voir docs).
-       Le rôle choisi à la connexion détermine l'espace ouvert. */
-    login({
-      email,
-      role,
-      name
-    }) {
-      const known = DB.users.find(u => u.email && email && u.email.toLowerCase() === email.toLowerCase());
-      const session = {
-        email: email || known && known.email || role + '@octopus.ai',
-        role: role || known && known.role || 'doctor',
-        name: name || known && known.name || (role === 'doctor' ? 'Dr. Amina Saidi' : role === 'admin' ? 'Mehdi El Otmani' : 'Omar Kabbaj'),
-        at: new Date().toISOString()
-      };
+    /* ---------- session / auth (vrai login + inscription) ----------
+       Deux modes transparents :
+       • Backend branché (API) → POST /auth/login & /auth/register (mot de passe
+         hashé côté serveur, token signé).
+       • Mode local (sans backend) → comptes + mots de passe hashés (SHA-256)
+         stockés dans localStorage, de sorte que login/inscription marchent
+         hors-ligne et persistent entre les rechargements.
+       Toutes les méthodes renvoient une Promise { ok, error?, session? }. */
+    async _hashPwd(pwd) {
+      try {
+        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('octopus|' + pwd));
+        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+      } catch (e) {
+        return 'plain:' + pwd;
+      } // repli si crypto indisponible
+    },
+    _localUsers() {
+      try {
+        return JSON.parse(localStorage.getItem('octopus.accounts') || '{}');
+      } catch (e) {
+        return {};
+      }
+    },
+    _saveLocalUsers(map) {
+      try {
+        localStorage.setItem('octopus.accounts', JSON.stringify(map));
+      } catch (e) {}
+    },
+    _setSession(session) {
       try {
         localStorage.setItem('octopus.session', JSON.stringify(session));
       } catch (e) {}
@@ -2369,7 +2416,162 @@ try { (() => {
         role: session.role
       });
       commit();
-      return clone(session);
+      return session;
+    },
+    async register({
+      email,
+      password,
+      role,
+      name,
+      dept
+    }) {
+      email = (email || '').trim().toLowerCase();
+      if (!email || !password) return {
+        ok: false,
+        error: 'E-mail et mot de passe requis.'
+      };
+      if (password.length < 6) return {
+        ok: false,
+        error: 'Mot de passe trop court (6 caractères min).'
+      };
+      role = role || 'student';
+      name = name || email.split('@')[0];
+      // backend prioritaire
+      if (API) {
+        try {
+          const r = await fetch(API + '/auth/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              email,
+              password,
+              role,
+              name,
+              dept
+            })
+          });
+          const d = await r.json().catch(() => ({}));
+          if (!r.ok) return {
+            ok: false,
+            error: d.detail || 'Inscription impossible.'
+          };
+          if (d.token) {
+            try {
+              localStorage.setItem('octopus.token', d.token);
+            } catch (e) {}
+          }
+          return {
+            ok: true,
+            session: this._setSession({
+              email: d.user.email,
+              role: d.user.role,
+              name: d.user.name,
+              at: new Date().toISOString()
+            })
+          };
+        } catch (e) {/* repli local si réseau coupé */}
+      }
+      // mode local
+      const users = this._localUsers();
+      if (users[email]) return {
+        ok: false,
+        error: 'Un compte existe déjà avec cet e-mail. Connectez-vous.'
+      };
+      users[email] = {
+        email,
+        role,
+        name,
+        dept: dept || '—',
+        hash: await this._hashPwd(password),
+        at: new Date().toISOString()
+      };
+      this._saveLocalUsers(users);
+      audit('auth.register', {
+        email,
+        role
+      });
+      return {
+        ok: true,
+        session: this._setSession({
+          email,
+          role,
+          name,
+          at: new Date().toISOString()
+        })
+      };
+    },
+    async login({
+      email,
+      password,
+      role
+    }) {
+      email = (email || '').trim().toLowerCase();
+      if (!email || !password) return {
+        ok: false,
+        error: 'E-mail et mot de passe requis.'
+      };
+      if (API) {
+        try {
+          const r = await fetch(API + '/auth/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              email,
+              password,
+              role
+            })
+          });
+          const d = await r.json().catch(() => ({}));
+          if (r.ok) {
+            if (d.token) {
+              try {
+                localStorage.setItem('octopus.token', d.token);
+              } catch (e) {}
+            }
+            return {
+              ok: true,
+              session: this._setSession({
+                email: d.user.email,
+                role: d.user.role,
+                name: d.user.name,
+                at: new Date().toISOString()
+              })
+            };
+          }
+          if (r.status === 404) return {
+            ok: false,
+            error: 'NO_ACCOUNT'
+          }; // → l'UI propose l'inscription
+          return {
+            ok: false,
+            error: d.detail || 'E-mail ou mot de passe incorrect.'
+          };
+        } catch (e) {/* repli local */}
+      }
+      // mode local
+      const users = this._localUsers();
+      const u = users[email];
+      if (!u) return {
+        ok: false,
+        error: 'NO_ACCOUNT'
+      };
+      if (u.hash !== (await this._hashPwd(password))) return {
+        ok: false,
+        error: 'E-mail ou mot de passe incorrect.'
+      };
+      return {
+        ok: true,
+        session: this._setSession({
+          email: u.email,
+          role: role || u.role,
+          name: u.name,
+          at: new Date().toISOString()
+        })
+      };
     },
     session() {
       try {
@@ -2381,9 +2583,11 @@ try { (() => {
     logout() {
       try {
         localStorage.removeItem('octopus.session');
+        localStorage.removeItem('octopus.token');
       } catch (e) {}
       audit('auth.logout', {});
       commit();
+      if (API) apiSend('POST', '/auth/logout');
     },
     /* lifecycle */
     onChange(fn) {
@@ -3926,7 +4130,8 @@ function UploadView({
     if (!f) return;
     setFile({
       name: f.name,
-      size: (f.size / 1024 / 1024).toFixed(1) + ' Mo'
+      size: (f.size / 1024 / 1024).toFixed(1) + ' Mo',
+      raw: f
     });
     if (f.type && f.type.startsWith('image/')) setPreview(URL.createObjectURL(f));else setPreview('../../assets/fundus-sample-1.svg');
   };
@@ -3938,7 +4143,28 @@ function UploadView({
   const run = () => {
     if (!file || busy) return;
     setBusy(true);
-    // Simulate the AI inference latency, then persist the new case to the DB.
+    // Si un backend est branché, on téléverse le VRAI fichier (multipart).
+    if (DB.uploadImage && window.OCTOPUS_BACKEND && file.raw) {
+      DB.uploadImage(file.raw, {
+        laterality: form.laterality,
+        device: form.device
+      }).then(created => {
+        setBusy(false);
+        onCreated && onCreated(created.id);
+      }).catch(() => {
+        // repli local en cas d'échec réseau
+        const created = DB.addCase({
+          id: form.id,
+          laterality: form.laterality,
+          device: form.device,
+          date: form.date
+        });
+        setBusy(false);
+        onCreated && onCreated(created.id);
+      });
+      return;
+    }
+    // Mode local : simulate la latence d'inférence puis persiste le cas.
     setTimeout(() => {
       const created = DB.addCase({
         id: form.id,

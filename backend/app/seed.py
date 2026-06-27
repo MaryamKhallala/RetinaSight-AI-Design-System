@@ -3,6 +3,10 @@ Exécuté au démarrage si la base est vide, ou via `python -m app.seed`.
 """
 from .database import SessionLocal, engine, Base
 from . import models
+from .auth import hash_password
+
+# Mot de passe démo commun (à supprimer en production).
+DEMO_PASSWORD = "demo"
 
 CASES = [
     dict(id="RS-02384", patient="A. Benali",    age=58, sex="F", laterality="OD", acquired="2026-05-04 09:12", device="Topcon NW400", grade=2, conf=92.4, av=1.42, lesions=3,  status="pending", note="Dépistage annuel de routine",      lesion_breakdown={"ma":1,"ex":2,"hem":0,"cw":0}),
@@ -47,7 +51,7 @@ def seed():
         if db.query(models.Case).count() > 0:
             return  # déjà amorcé
         db.add_all([models.Case(**c) for c in CASES])
-        db.add_all([models.User(**u) for u in USERS])
+        db.add_all([models.User(password_hash=hash_password(DEMO_PASSWORD), **u) for u in USERS])
         db.add_all([models.Dataset(**d) for d in DATASETS])
         db.add_all([models.Model(**m) for m in MODELS])
         db.commit()

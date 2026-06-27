@@ -76,7 +76,7 @@ function UploadView({ cases, onCreated, onOpen }) {
 
   const accept = (f) => {
     if (!f) return;
-    setFile({ name: f.name, size: (f.size/1024/1024).toFixed(1) + ' Mo' });
+    setFile({ name: f.name, size: (f.size/1024/1024).toFixed(1) + ' Mo', raw: f });
     if (f.type && f.type.startsWith('image/')) setPreview(URL.createObjectURL(f));
     else setPreview('../../assets/fundus-sample-1.svg');
   };
@@ -85,7 +85,17 @@ function UploadView({ cases, onCreated, onOpen }) {
   const run = () => {
     if (!file || busy) return;
     setBusy(true);
-    // Simulate the AI inference latency, then persist the new case to the DB.
+    // Si un backend est branché, on téléverse le VRAI fichier (multipart).
+    if (DB.uploadImage && window.OCTOPUS_BACKEND && file.raw) {
+      DB.uploadImage(file.raw, { laterality: form.laterality, device: form.device })
+        .then(created => { setBusy(false); onCreated && onCreated(created.id); })
+        .catch(() => { // repli local en cas d'échec réseau
+          const created = DB.addCase({ id: form.id, laterality: form.laterality, device: form.device, date: form.date });
+          setBusy(false); onCreated && onCreated(created.id);
+        });
+      return;
+    }
+    // Mode local : simulate la latence d'inférence puis persiste le cas.
     setTimeout(() => {
       const created = DB.addCase({ id: form.id, laterality: form.laterality, device: form.device, date: form.date });
       setBusy(false);
